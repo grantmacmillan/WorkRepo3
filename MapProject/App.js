@@ -1,8 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform } from 'react-native';
 import JobList from './JobList';
 import JobMap from './JobMap';
+import { LoadScript } from '@react-google-maps/api';
+import Map from './Map';
+
+const libraries = ["places"];
 
 const App = () => {
 
@@ -11,11 +15,23 @@ const App = () => {
     { address: '44 Flint Cresent Stouffville Ontario', technician: 'Grant', id: '2' },
   ]);
 
-  return (
-    <View style={styles.container}>
 
-      <JobMap jobs={jobs}></JobMap>
-    </View>
+  if (Platform.OS !== 'web') {
+    return (
+      <View style={styles.container}>
+        <JobList jobs={jobs} />
+
+      </View>
+    );
+  }
+
+  return (
+    <LoadScript
+      googleMapsApiKey="AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"
+      libraries={libraries}
+    >
+      <Map />
+    </LoadScript>
   );
 };
 

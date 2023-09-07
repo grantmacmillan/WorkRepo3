@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import JobList from './JobList';
+import JobMap from './JobMap';
 
 const App = () => {
 
@@ -12,7 +13,8 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <JobList jobs={jobs}></JobList>
+
+      <JobMap jobs={jobs}></JobMap>
     </View>
   );
 };

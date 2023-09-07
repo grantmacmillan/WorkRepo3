@@ -1,26 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Linking } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Linking, Alert, Platform, Pressable } from 'react-native';
 
 const JobList = (props) => {
     const jobs = props.jobs;
 
     const handleDirectionsPressed = (address) => {
-        // Construct the Google Maps URL with the address
-        const mapsURL = `https://www.google.com/maps/search/?api=1&query=${address}`;
+        // Add address to Google maps URL
+        const mapsURL = `https://www.google.com/maps/dir/?api=1&origin=my+location&destination=${encodeURIComponent(address)}`;
 
-        const supported = Linking.canOpenURL(mapsURL);
-
-        if (supported) {
-            Linking.openURL(mapsURL); //OPEN google maps with the URL made using the address
-        }
-        else {
-            Alert.alert(`Please install google maps to open this link ${mapsURL}`);
-        }
-
-
-        console.log('Submitted Address:', address);
+        Linking.canOpenURL(mapsURL)
+            .then((supported) => {
+                if (supported) {
+                    Linking.openURL(mapsURL); // Open google maps with the URL made using the job address
+                } else {
+                    Alert.alert(`Don't know how to open this URL: ${mapsURL}`);
+                }
+            })
+            .catch((err) => console.error('An error occurred', err));
     };
-
     return (
         <View style={styles.container}>
             <Text style={{ fontSize: 40, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' }}>Jobs</Text>
@@ -28,13 +25,11 @@ const JobList = (props) => {
                 <View key={job.id} style={styles.jobItem}>
                     <View style={styles.jobContent}>
                         <View style={styles.jobDetails}>
-
                             <Text>{job.address}</Text>
-
                         </View>
-                        <TouchableOpacity style={styles.button} onPress={() => { handleDirectionsPressed(job.address) }}>
+                        <Pressable style={styles.button} onPress={() => { handleDirectionsPressed(job.address) }}>
                             <Text>Directions</Text>
-                        </TouchableOpacity>
+                        </Pressable>
                     </View>
                 </View>
             ))}
@@ -60,11 +55,6 @@ const styles = StyleSheet.create({
     },
     jobDetails: {
         flex: 1,
-    },
-    title: {
-        color: '#FFA500',
-        fontSize: 20,
-        fontWeight: 'bold',
     },
     button: {
         padding: 10,

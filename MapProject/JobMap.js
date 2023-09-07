@@ -1,58 +1,58 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button } from 'react-native';
 import axios from 'axios';
 
-const JobMap = (props) => {
-    const [address, setAddress] = useState(''); // For the address input
-    const [coords, setCoords] = useState(null); // To store and display coordinates
-
+const JobMap = ({ jobs }) => {
+    const [coords, setCoords] = useState([]);
     const GEOCODING_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
     const GOOGLE_API_KEY = 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo';
 
-    const getLatLng = async () => {
-        try {
-            const response = await axios.get(GEOCODING_API_URL, {
-                params: {
-                    address: address,
-                    key: GOOGLE_API_KEY
-                }
-            });
+    useEffect(() => {
+        async function fetchCoordsForJobs() {
+            const newCoords = [];
 
-            if (response.data.status === 'OK') {
-                const location = response.data.results[0].geometry.location;
-                setCoords({ lat: location.lat, lng: location.lng });
-            } else {
-                console.error('Error fetching coordinates:', response.data.status);
-                setCoords(null);
+            for (let job of jobs) {
+                try {
+                    const response = await axios.get(GEOCODING_API_URL, {
+                        params: {
+                            address: job.address,
+                            key: GOOGLE_API_KEY
+                        }
+                    });
+
+                    if (response.data.status === 'OK') {
+                        const location = response.data.results[0].geometry.location;
+                        newCoords.push({
+                            id: job.id,
+                            lat: location.lat,
+                            lng: location.lng
+                        });
+                    } else {
+                        console.error('Error fetching coordinates:', response.data.status);
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                }
             }
 
-        } catch (error) {
-            console.error('Error:', error);
-            setCoords(null);
+            setCoords(newCoords);
         }
-    }
+
+        fetchCoordsForJobs();
+    }, [jobs]);
 
     return (
         <View style={{ padding: 20 }}>
-            <TextInput
-                style={{
-                    height: 40,
-                    borderColor: 'gray',
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    padding: 10
-                }}
-                placeholder="Enter address..."
-                value={address}
-                onChangeText={text => setAddress(text)}
-            />
-            <Button title="Get Coordinates" onPress={getLatLng} />
-            {coords && (
-                <View style={{ marginTop: 20 }}>
-                    <Text>Latitude: {coords.lat}</Text>
-                    <Text>Longitude: {coords.lng}</Text>
+            {coords.map(coord => (
+                <View key={coord.id} style={{ marginBottom: 20 }}>
+                    <Text>Job ID: {coord.id}</Text>
+                    <Text>Technician: {jobs.find(job => job.id === coord.id)?.technician}</Text>
+                    <Text>Address: {jobs.find(job => job.id === coord.id)?.address}</Text>
+                    <Text>Latitude: {coord.lat}</Text>
+                    <Text>Longitude: {coord.lng}</Text>
                 </View>
-            )}
+            ))}
         </View>
     );
 }

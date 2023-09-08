@@ -24,15 +24,18 @@ const App = () => {
       </View>
     );
   }
+  else {
+    return (
+      <LoadScript
+        googleMapsApiKey="AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"
+        libraries={libraries}
+      >
+        <Map />
+      </LoadScript>
+    );
+  }
 
-  return (
-    <LoadScript
-      googleMapsApiKey="AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"
-      libraries={libraries}
-    >
-      <Map />
-    </LoadScript>
-  );
+
 };
 
 const styles = StyleSheet.create({

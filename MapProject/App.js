@@ -11,8 +11,8 @@ const libraries = ["places"];
 const App = () => {
 
   const [jobs, setJobs] = useState([
-    { address: '2 Ironwood Cresent Stouffville Ontario', technician: 'Justin', id: '1' },
-    { address: '44 Flint Cresent Stouffville Ontario', technician: 'Grant', id: '2' },
+    { address: '2 Ironwood Cresent Stouffville Ontario', technician: 'Justin', color: 'red', id: '1' },
+    { address: '44 Flint Cresent Stouffville Ontario', technician: 'Grant', color: 'green', id: '2' },
   ]);
 
 

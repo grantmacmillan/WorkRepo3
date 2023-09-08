@@ -24,7 +24,7 @@ const Map = ({ jobs }) => {
 
     const [coords, setCoords] = useState([]);
     const GEOCODING_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
-    const GOOGLE_API_KEY = 'AIzaSyDvs - pYzrss81ukHq49 - um25r1ZOXK - mHo'; // GRANTS API KEY - DO NOT SHARE
+    const GOOGLE_API_KEY = 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo'; // GRANTS API KEY - DO NOT SHARE
     console.log(jobs);
 
     useEffect(() => {
@@ -74,13 +74,13 @@ const Map = ({ jobs }) => {
             center={center}
             zoom={2}
         >
-            {locations.map((location, idx) => (
+            {coords.map((coord) => (
                 <Marker
-                    key={idx}
-                    position={{ lat: location.lat, lng: location.lng }}
-                    title={location.name}
+                    key={coord.id}
+                    position={{ lat: coord.lat, lng: coord.lng }}
+                    title={jobs.find(job => job.id === coord.id)?.address}
                     icon={{
-                        url: `http://maps.google.com/mapfiles/ms/icons/${location.color}-dot.png`
+                        url: `http://maps.google.com/mapfiles/ms/icons/${jobs.find(job => job.id === coord.id)?.color}-dot.png`
                     }}
                 />
             ))}
@@ -88,4 +88,4 @@ const Map = ({ jobs }) => {
     );
 };
 
-export default Map;
+export default React.memo(Map);

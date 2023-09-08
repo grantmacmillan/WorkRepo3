@@ -30,7 +30,7 @@ const App = () => {
         googleMapsApiKey="AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"
         libraries={libraries}
       >
-        <Map />
+        <Map jobs={jobs} />
       </LoadScript>
     );
   }

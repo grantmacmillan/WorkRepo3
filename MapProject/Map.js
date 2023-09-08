@@ -17,7 +17,9 @@ const locations = [
     { name: 'New York, USA', lat: 40.7128, lng: -74.0060, color: 'red' },
 ];
 
-const Map = () => {
+const Map = ({ jobs }) => {
+    console.log(jobs);
+
     return (
         <GoogleMap
             mapContainerStyle={containerStyle}

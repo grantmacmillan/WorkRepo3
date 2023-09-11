@@ -5,14 +5,7 @@ import JobList from './JobList';
 import JobMap from './JobMap';
 import { LoadScript } from '@react-google-maps/api';
 import Map from './Map';
-
-// THIS STOPS WEB VERSION FROM CRASHING
-let MobileMap;
-if (Platform.OS !== 'web') {
-  console.log('LOAD MOBILE MAP')
-  MobileMap = require('./MobileMap').default;
-}
-
+import MobileMap from './MobileMap';
 
 const libraries = ["places"];
 
@@ -28,7 +21,7 @@ const App = () => {
   if (Platform.OS !== 'web') {
     return (
       <View style={styles.container}>
-        <MobileMap jobs={jobs} />
+        {MobileMap && <MobileMap jobs={jobs} />}
 
       </View>
     );

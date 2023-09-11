@@ -5,11 +5,19 @@ import JobList from './JobList';
 import JobMap from './JobMap';
 import { LoadScript } from '@react-google-maps/api';
 import Map from './Map';
-import MobileMap from './MobileMap';
+
+// THIS STOPS WEB VERSION FROM CRASHING
+let MobileMap;
+if (Platform.OS !== 'web') {
+  console.log('LOAD MOBILE MAP')
+  MobileMap = require('./MobileMap').default;
+}
+
 
 const libraries = ["places"];
 
 const App = () => {
+
 
   const [jobs, setJobs] = useState([
     { address: '2 Ironwood Cresent Stouffville Ontario', technician: 'Justin', color: 'red', id: '1' },
@@ -26,6 +34,7 @@ const App = () => {
     );
   }
   else {
+    //The LoadScript component loads the google maps API and any libraries (this gets rid of the for development only warning)
     return (
       <LoadScript
         googleMapsApiKey="AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"

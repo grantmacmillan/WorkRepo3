@@ -1,27 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, Marker } from '@react-google-maps/api';
-
-
+import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import axios from 'axios';
 
-const containerStyle = {
-    width: '90vw',
-    height: '90vh',
-};
-
-const center = {
-    lat: 43.856098,
-    lng: -79.337021,
-};
-
-const locations = [
-    { name: 'London, England', lat: 51.5074, lng: -0.1278, color: 'blue' },
-    { name: 'Toronto, Canada', lat: 43.651070, lng: -79.347015, color: 'green' },
-    { name: 'New York, USA', lat: 40.7128, lng: -74.0060, color: 'red' },
-];
-
-const Map = ({ jobs }) => {
-
+const MobileMap = ({ jobs }) => {
     const [coords, setCoords] = useState([]);
     const GEOCODING_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
     const GOOGLE_API_KEY = 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo'; // GRANTS API KEY - DO NOT SHARE
@@ -69,23 +51,40 @@ const Map = ({ jobs }) => {
     }, [jobs]);
 
     return (
-        <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={8}
-        >
-            {coords.map((coord) => (
-                <Marker
-                    key={coord.id}
-                    position={{ lat: coord.lat, lng: coord.lng }}
-                    title={jobs.find(job => job.id === coord.id)?.address}
-                    icon={{
-                        url: `http://maps.google.com/mapfiles/ms/icons/${jobs.find(job => job.id === coord.id)?.color}-dot.png`
-                    }}
-                />
-            ))}
-        </GoogleMap>
+        <View style={styles.container}>
+            <MapView
+                style={styles.map}
+                initialRegion={{
+                    latitude: 43.856098,    // starting coords for map, set to markham ontario ATM
+                    longitude: -79.337021,
+                    latitudeDelta: 1.5922,  // delta coords control zoom out level
+                    longitudeDelta: 1.5421,
+                }}
+            >
+                {coords.map((coord) => (
+                    <Marker
+                        key={coord.id}
+                        coordinate={{ latitude: coord.lat, longitude: coord.lng }}
+                        title={jobs.find(job => job.id === coord.id)?.address}
+                        description={jobs.find(job => job.id === coord.id)?.technician}
+                        pinColor={jobs.find(job => job.id === coord.id)?.color}
+                    />
+                ))}
+            </MapView>
+        </View>
     );
 };
 
-export default React.memo(Map);
+const styles = StyleSheet.create({
+    container: {
+        ...StyleSheet.absoluteFillObject,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+    },
+});
+
+
+export default MobileMap;

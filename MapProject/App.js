@@ -5,6 +5,7 @@ import JobList from './JobList';
 import JobMap from './JobMap';
 import { LoadScript } from '@react-google-maps/api';
 import Map from './Map';
+import MobileMap from './MobileMap';
 
 const libraries = ["places"];
 
@@ -19,7 +20,7 @@ const App = () => {
   if (Platform.OS !== 'web') {
     return (
       <View style={styles.container}>
-        <JobList jobs={jobs} />
+        <MobileMap jobs={jobs} />
 
       </View>
     );

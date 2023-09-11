@@ -27,10 +27,10 @@ const App = () => {
     );
   }
   else {
-    //The LoadScript component loads the google maps API and any libraries (this gets rid of the for development only warning)
+    //The LoadScript component loads the google maps API and any libraries (this gets rid of the for development only watermark)
     return (
       <LoadScript
-        googleMapsApiKey="REPLEACE WITH API KEY"
+        googleMapsApiKey="AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"
         libraries={libraries}
       >
         <Map jobs={jobs} />

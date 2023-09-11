@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-
-
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import axios from 'axios';
 
+// takes up 80% of screen width and height
 const containerStyle = {
-    width: '90vw',
-    height: '90vh',
+    width: '80vw',
+    height: '80vh',
 };
 
+//center map over markham ontario
 const center = {
     lat: 43.856098,
     lng: -79.337021,
 };
-
-const locations = [
-    { name: 'London, England', lat: 51.5074, lng: -0.1278, color: 'blue' },
-    { name: 'Toronto, Canada', lat: 43.651070, lng: -79.347015, color: 'green' },
-    { name: 'New York, USA', lat: 40.7128, lng: -74.0060, color: 'red' },
-];
 
 const Map = ({ jobs }) => {
 
@@ -69,23 +64,38 @@ const Map = ({ jobs }) => {
     }, [jobs]);
 
     return (
-        <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={8}
-        >
-            {coords.map((coord) => (
-                <Marker
-                    key={coord.id}
-                    position={{ lat: coord.lat, lng: coord.lng }}
-                    title={jobs.find(job => job.id === coord.id)?.address}
-                    icon={{
-                        url: `http://maps.google.com/mapfiles/ms/icons/${jobs.find(job => job.id === coord.id)?.color}-dot.png`
-                    }}
-                />
-            ))}
-        </GoogleMap>
+        <View style={styles.container}>
+            <Text style={styles.header}>Job Map</Text>
+            <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={8}
+            >
+                {coords.map((coord) => (
+                    <Marker
+                        key={coord.id}
+                        position={{ lat: coord.lat, lng: coord.lng }}
+                        title={jobs.find(job => job.id === coord.id)?.address}
+                        icon={{
+                            url: `http://maps.google.com/mapfiles/ms/icons/${jobs.find(job => job.id === coord.id)?.color}-dot.png`
+                        }}
+                    />
+                ))}
+            </GoogleMap>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    header: {
+        fontSize: 24,
+        marginBottom: 20,
+    },
+});
 
 export default React.memo(Map);

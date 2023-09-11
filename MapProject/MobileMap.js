@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import axios from 'axios';
 
 const MobileMap = ({ jobs }) => {
@@ -51,13 +51,17 @@ const MobileMap = ({ jobs }) => {
     }, [jobs]);
 
     return (
+
         <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Job Map</Text>
+            </View>
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: 43.856098,    // starting coords for map, set to markham ontario ATM
+                    latitude: 43.856098,
                     longitude: -79.337021,
-                    latitudeDelta: 1.5922,  // delta coords control zoom out level
+                    latitudeDelta: 1.5922,
                     longitudeDelta: 1.5421,
                 }}
             >
@@ -77,14 +81,20 @@ const MobileMap = ({ jobs }) => {
 
 const styles = StyleSheet.create({
     container: {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: 'flex-end',
+        flex: 1,
+    },
+    header: {
+        height: 100,
+        justifyContent: 'center',
         alignItems: 'center',
+
+    },
+    headerText: {
+        fontSize: 24,
     },
     map: {
-        ...StyleSheet.absoluteFillObject,
+        flex: 1,
+        minWidth: '100%',
     },
 });
-
-
 export default MobileMap;

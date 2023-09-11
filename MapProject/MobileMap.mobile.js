@@ -6,7 +6,7 @@ import axios from 'axios';
 const MobileMap = ({ jobs }) => {
     const [coords, setCoords] = useState([]);
     const GEOCODING_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
-    const GOOGLE_API_KEY = 'REPLACE WITH API KEY'; // GRANTS API KEY - DO NOT SHARE
+    const GOOGLE_API_KEY = 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo'; // GRANTS API KEY - DO NOT SHARE
     console.log(jobs);
 
     useEffect(() => {
@@ -52,6 +52,9 @@ const MobileMap = ({ jobs }) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Map Header</Text>
+            </View>
             <MapView
                 style={styles.map}
                 initialRegion={{
@@ -77,14 +80,20 @@ const MobileMap = ({ jobs }) => {
 
 const styles = StyleSheet.create({
     container: {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: 'flex-end',
+        flex: 1,
+    },
+    header: {
+        height: '20%',
+        justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#f8f9fa', // Set a background color for the header
+    },
+    headerText: {
+        fontSize: 24, // Set a font size for the header text
     },
     map: {
-        ...StyleSheet.absoluteFillObject,
+        height: '80%',
     },
 });
-
 
 export default MobileMap;

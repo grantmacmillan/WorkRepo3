@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, Text } from 'react-native';
 import axios from 'axios';
 
 const MobileMap = ({ jobs }) => {
     const [coords, setCoords] = useState([]);
     const GEOCODING_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
-    const GOOGLE_API_KEY = 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo'; // GRANTS API KEY - DO NOT SHARE
+    const GOOGLE_API_KEY = 'REPLACE WITH API KEY'; // GRANTS API KEY - DO NOT SHARE
     console.log(jobs);
 
     useEffect(() => {
@@ -51,16 +51,17 @@ const MobileMap = ({ jobs }) => {
     }, [jobs]);
 
     return (
+
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerText}>Map Header</Text>
+                <Text style={styles.headerText}>Job Map</Text>
             </View>
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: 43.856098,    // starting coords for map, set to markham ontario ATM
+                    latitude: 43.856098,
                     longitude: -79.337021,
-                    latitudeDelta: 1.5922,  // delta coords control zoom out level
+                    latitudeDelta: 1.5922,
                     longitudeDelta: 1.5421,
                 }}
             >
@@ -83,17 +84,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     header: {
-        height: '20%',
+        height: 100,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f8f9fa', // Set a background color for the header
+
     },
     headerText: {
-        fontSize: 24, // Set a font size for the header text
+        fontSize: 24,
     },
     map: {
-        height: '80%',
+        flex: 1,
+        minWidth: '100%',
     },
 });
-
 export default MobileMap;

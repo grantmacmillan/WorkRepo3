@@ -1,0 +1,19 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Style for table header cells */
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+
+}
+
+/* Style for table data cells */
+td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}

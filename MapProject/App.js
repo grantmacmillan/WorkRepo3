@@ -6,6 +6,7 @@ import JobMap from './JobMap';
 import { LoadScript } from '@react-google-maps/api';
 import Map from './Map';
 import MobileMap from './MobileMap';
+import InventoryScreen from './InventoryScreen';
 
 const libraries = ["places"];
 
@@ -18,25 +19,11 @@ const App = () => {
   ]);
 
 
-  if (Platform.OS !== 'web') {
-    return (
-      <View style={styles.container}>
-        {MobileMap && <MobileMap jobs={jobs} />}
-
-      </View>
-    );
-  }
-  else {
-    //The LoadScript component loads the google maps API and any libraries (this gets rid of the for development only watermark)
-    return (
-      <LoadScript
-        googleMapsApiKey="REPLACE WITH API KEY"
-        libraries={libraries}
-      >
-        <Map jobs={jobs} />
-      </LoadScript>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <InventoryScreen />
+    </View>
+  )
 
 
 };

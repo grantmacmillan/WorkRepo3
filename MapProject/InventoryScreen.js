@@ -12,7 +12,7 @@ const InventoryScreen = () => {
                 <td>Item No. {i}</td>
                 <td>{i * 5}</td>
                 <td>$ {i * 7}</td>
-                <td>A paragraph...</td>
+                <td>A paragraph is a series of sentences that are organized and coherent, and are all related to a single topic. Almost every piece of writing you do that is longer than a few sentences should be organized into paragraphs.</td>
                 <td style={{ textAlign: 'center' }}><input type='checkbox' /></td>
                 <td style={{ textAlign: 'center' }}><button>Delete</button></td>
             </tr>
@@ -43,7 +43,7 @@ const InventoryScreen = () => {
     return (
         <div>
             <h1 style={{ textAlign: 'left' }}>Inventory Screen</h1>
-            <div style={{ width: '80vw', overflowX: 'scroll' }}>
+            <div style={{ width: '80vw', overflowX: 'scroll', border: '5px solid #FFA500' }}>
                 <table style={{ tableLayout: 'fixed', width: 'max-content' }}>
                     <thead>
                         <tr>

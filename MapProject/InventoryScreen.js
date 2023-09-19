@@ -6,6 +6,10 @@ const InventoryScreen = () => {
     const containerRef = useRef(null);
     const [colWidths, setColWidths] = useState([]);
 
+    // Use this variable to add headers. The number of headers will be the number of columns in the table. Add the information for row in the getItemRows function.
+    const headers = ['Item Name', 'Item Quantity', 'Item Price', 'Item Description', '', ''];
+    const totalColumns = headers.length;
+
     useEffect(() => {
         resetTable();
     }, []); //runs after render
@@ -16,8 +20,8 @@ const InventoryScreen = () => {
         if (containerRef.current) {
             const containerWidth = containerRef.current.offsetWidth;
             const paddingAndBorderWidth = 18; // 16px for padding and 2px for borders
-            const initialColWidth = (containerWidth / 6) - paddingAndBorderWidth;
-            setColWidths(Array(6).fill(initialColWidth)); // 6 is the number of columns
+            const initialColWidth = (containerWidth / totalColumns) - paddingAndBorderWidth;
+            setColWidths(Array(totalColumns).fill(initialColWidth)); // 6 is the number of columns
             console.log(containerWidth);
             console.log(initialColWidth);
         }
@@ -73,7 +77,7 @@ const InventoryScreen = () => {
                 <table style={{ tableLayout: 'fixed', width: 'max-content' }}>
                     <thead>
                         <tr>
-                            {['Item Name', 'Item Quantity', 'Item Price', 'Item Description', '', ''].map((header, index) => (
+                            {headers.map((header, index) => (
                                 <th key={index} style={{ width: colWidths[index] + 'px', position: 'relative' }}>
                                     {header}
                                     <div

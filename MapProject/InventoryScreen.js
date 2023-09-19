@@ -6,9 +6,13 @@ const InventoryScreen = () => {
     const containerRef = useRef(null);
     const [colWidths, setColWidths] = useState([]);
 
+    useEffect(() => {
+        resetTable();
+    }, []); //runs after render
+
     //This whole use effect statement is for getting the initial width of the table columns to be the same as the width of the container.
     //The calculations did not account for the margins in the text. So I added them manually.
-    useEffect(() => {
+    const resetTable = () => {
         if (containerRef.current) {
             const containerWidth = containerRef.current.offsetWidth;
             const paddingAndBorderWidth = 18; // 16px for padding and 2px for borders
@@ -17,7 +21,11 @@ const InventoryScreen = () => {
             console.log(containerWidth);
             console.log(initialColWidth);
         }
-    }, []);
+    };
+
+    const handleResetButtonClick = () => {
+        resetTable();
+    };
 
 
     const getItemRows = () => {
@@ -57,6 +65,7 @@ const InventoryScreen = () => {
     return (
         <div>
             <h1 style={{ textAlign: 'left' }}>Inventory Screen</h1>
+            <button onClick={handleResetButtonClick}>Reset Table</button>
             <div
                 ref={containerRef}
                 style={{ width: '80vw', overflowX: 'scroll', border: '5px solid #FFA500' }}

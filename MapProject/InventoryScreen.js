@@ -1,9 +1,23 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import './InventoryScreen.css'; // INVENTORY SCREEN CSS
 
 const InventoryScreen = () => {
 
-    const [colWidths, setColWidths] = useState([150, 150, 150, 150, 80, 80]);
+    const containerRef = useRef(null);
+    const [colWidths, setColWidths] = useState([]);
+
+    //This whole use effect statement is for getting the initial width of the table columns to be the same as the width of the container.
+    //The calculations did not account for the margins in the text. So I added them manually.
+    useEffect(() => {
+        if (containerRef.current) {
+            const containerWidth = containerRef.current.offsetWidth;
+            const paddingAndBorderWidth = 18; // 16px for padding and 2px for borders
+            const initialColWidth = (containerWidth / 6) - paddingAndBorderWidth;
+            setColWidths(Array(6).fill(initialColWidth)); // 6 is the number of columns
+            console.log(containerWidth);
+            console.log(initialColWidth);
+        }
+    }, []);
 
 
     const getItemRows = () => {
@@ -43,7 +57,10 @@ const InventoryScreen = () => {
     return (
         <div>
             <h1 style={{ textAlign: 'left' }}>Inventory Screen</h1>
-            <div style={{ width: '80vw', overflowX: 'scroll', border: '5px solid #FFA500' }}>
+            <div
+                ref={containerRef}
+                style={{ width: '80vw', overflowX: 'scroll', border: '5px solid #FFA500' }}
+            >
                 <table style={{ tableLayout: 'fixed', width: 'max-content' }}>
                     <thead>
                         <tr>

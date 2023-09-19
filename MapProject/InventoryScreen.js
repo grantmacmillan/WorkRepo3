@@ -52,12 +52,22 @@ const InventoryScreen = () => {
 
         const handleMouseMove = (e) => {
             const moveX = e.pageX - startX;
+            const newWidth = Math.max(Math.min(startWidth + moveX, containerRef.current.offsetWidth), 50);
             const newWidths = [...colWidths];
-            newWidths[index] = Math.max(startWidth + moveX, 50);
+            newWidths[index] = newWidth;
+
+            //This if-else statement is used for changing the cursor to not-allowed when the user tries to resize the column to be too small or too big. (You can remove if you want)
+            if (newWidth >= containerRef.current.offsetWidth || newWidth <= 50) {
+                document.body.style.cursor = 'not-allowed';
+            } else {
+                document.body.style.cursor = '';
+            }
+
             setColWidths(newWidths);
         };
 
         const handleMouseUp = () => {
+            document.body.style.cursor = '';
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };

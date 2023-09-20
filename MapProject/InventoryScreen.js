@@ -21,7 +21,7 @@ const InventoryScreen = () => {
             const containerWidth = containerRef.current.offsetWidth;
             const paddingAndBorderWidth = 18; // 16px for padding and 2px for borders
             const initialColWidth = (containerWidth / totalColumns) - paddingAndBorderWidth;
-            setColWidths(Array(totalColumns).fill(initialColWidth)); // 6 is the number of columns
+            setColWidths(Array(totalColumns).fill(initialColWidth));
             console.log(containerWidth);
             console.log(initialColWidth);
         }
@@ -31,7 +31,7 @@ const InventoryScreen = () => {
         resetTable();
     };
 
-
+    //function used for filling table data
     const getItemRows = () => {
         return [...Array(10)].map((_, i) => (
             <tr key={i}>
@@ -47,13 +47,15 @@ const InventoryScreen = () => {
 
     const handleMouseDown = (index) => (e) => {
         e.preventDefault();
-        const startX = e.pageX;
+        const startX = e.pageX; //initial mouse position
         const startWidth = colWidths[index];
 
         const handleMouseMove = (e) => {
-            const moveX = e.pageX - startX;
-            const maxWidth = containerRef.current.offsetWidth / 2;
-            const newWidth = Math.max(Math.min(startWidth + moveX, maxWidth), 50);
+            const moveX = e.pageX - startX; //how much the mouse has moved
+            const maxWidth = containerRef.current.offsetWidth / 2; //max width of a column
+            const newWidth = Math.max(Math.min(startWidth + moveX, maxWidth), 50); //new width of the column thats being resized
+
+            //spread of colWidths array, use index to know which column to change in the array. Prevents all columns from being resized.
             const newWidths = [...colWidths];
             newWidths[index] = newWidth;
 
@@ -64,6 +66,7 @@ const InventoryScreen = () => {
                 document.body.style.cursor = '';
             }
 
+            //update colWidths array that is used in the <th> elements
             setColWidths(newWidths);
         };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import './InventoryScreen.css'; // INVENTORY SCREEN CSS
 
 const InventoryScreen = () => {
+    //INVENTORY SCREEN
 
     const containerRef = useRef(null);
     const [colWidths, setColWidths] = useState([]);

@@ -5,14 +5,23 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 const AddressInput = () => {
     const [location, setLocation] = useState('');
 
-    const handlePress = () => {
-        console.log('Location selected:', location);
+    const [address1, setAddress1] = useState('');
+    const [address2, setAddress2] = useState('');
+    const [city, setCity] = useState('');
+    const [province, setProvince] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+    const [country, setCountry] = useState('');
+
+    const handlePress = (data, details = null) => {
+        console.log(data, details);
+        // Update the location state with the selected location
+        setLocation(data.description);
     };
 
     return (
         <View style={{ paddingVertical: 60 }}>
             <View style={{ zIndex: 999, width: '80%', alignSelf: 'center' }}>
-                <Text>Address</Text>
+                <Text>Address Line 1</Text>
             </View>
 
             <View style={{ zIndex: 1000, flex: 1, marginBottom: 60 }}>
@@ -48,10 +57,7 @@ const AddressInput = () => {
                         },
                     }}
                     placeholder='Enter Location'
-                    onPress={(data, details = null) => {
-                        console.log(data, details);
-                        setLocation(data.description);
-                    }}
+                    onPress={handlePress}
                     query={{
                         key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // Please replace with your actual API key
                         language: 'en',
@@ -65,6 +71,8 @@ const AddressInput = () => {
 
             </View>
             <View style={{ zIndex: 999, width: '80%', alignSelf: 'center' }}>
+                <Text>Address Line 2</Text>
+                <TextInput style={styles.textInput}></TextInput>
                 <Text>City</Text>
                 <TextInput style={styles.textInput}></TextInput>
                 <Text>Province</Text>

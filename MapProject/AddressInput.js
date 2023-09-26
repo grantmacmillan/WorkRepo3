@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Button, Pressable, TextInput, StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const AddressInput = () => {
@@ -104,7 +104,19 @@ const AddressInput = () => {
                 <TextInput style={styles.textInput} value={postalCode} onChangeText={setPostalCode} />
                 <Text>Country</Text>
                 <TextInput style={styles.textInput} value={country} onChangeText={setCountry} />
-                <Button title="Submit" onPress={handleSave} />
+                <Pressable
+                    onPress={handleSave}
+                    style={({ pressed }) => ({
+                        backgroundColor: pressed ? 'white' : 'blue',
+                        paddingVertical: 10,
+                        paddingHorizontal: 20,
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    })}
+                >
+                    <Text style={{ color: 'white', fontSize: 16 }}>Save</Text>
+                </Pressable>
             </View>
         </View>
 

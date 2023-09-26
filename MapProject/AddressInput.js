@@ -14,8 +14,20 @@ const AddressInput = () => {
 
     const handlePress = (data, details = null) => {
         console.log(data, details);
-        // Update the location state with the selected location
-        setLocation(data.description);
+
+        // Extract relevant address components from details and set them to state variables
+        const addressComponents = details?.address_components || [];
+        setAddress1(addressComponents?.find(item => item.types.includes('street_number'))?.long_name + ' ' +
+            addressComponents?.find(item => item.types.includes('route'))?.long_name);
+        setAddress2(addressComponents?.find(item => item.types.includes('sublocality_level_1'))?.long_name);
+        setCity(addressComponents?.find(item => item.types.includes('locality'))?.long_name);
+        setProvince(addressComponents?.find(item => item.types.includes('administrative_area_level_1'))?.long_name);
+        setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name);
+        setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name);
+    };
+
+    const handleSave = () => {
+        console.log('address: ' + address1 + ' ' + address2 + ' ' + city + ' ' + province + ' ' + postalCode + ' ' + country);
     };
 
     return (
@@ -56,7 +68,7 @@ const AddressInput = () => {
                             backgroundColor: '#008000', // Ensure each row is not transparent
                         },
                     }}
-                    placeholder='Enter Location'
+                    placeholder={address1 || 'Enter Location'}
                     onPress={handlePress}
                     query={{
                         key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // Please replace with your actual API key
@@ -67,21 +79,22 @@ const AddressInput = () => {
                         return predictions.slice(0, 5);
                     }}
 
+
                 />
 
             </View>
             <View style={{ zIndex: 999, width: '80%', alignSelf: 'center' }}>
                 <Text>Address Line 2</Text>
-                <TextInput style={styles.textInput}></TextInput>
+                <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
                 <Text>City</Text>
-                <TextInput style={styles.textInput}></TextInput>
+                <TextInput style={styles.textInput} value={city} onChangeText={setCity} />
                 <Text>Province</Text>
-                <TextInput style={styles.textInput}></TextInput>
+                <TextInput style={styles.textInput} value={province} onChangeText={setProvince} />
                 <Text>Postal Code</Text>
-                <TextInput style={styles.textInput}></TextInput>
+                <TextInput style={styles.textInput} value={postalCode} onChangeText={setPostalCode} />
                 <Text>Country</Text>
-                <TextInput style={styles.textInput}></TextInput>
-                <Button title="Submit" onPress={handlePress} />
+                <TextInput style={styles.textInput} value={country} onChangeText={setCountry} />
+                <Button title="Submit" onPress={handleSave} />
             </View>
         </View>
 

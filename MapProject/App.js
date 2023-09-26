@@ -1,12 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
-import JobList from './JobList';
-import JobMap from './JobMap';
-import { LoadScript } from '@react-google-maps/api';
-import Map from './Map';
-import MobileMap from './MobileMap';
-import InventoryScreen from './InventoryScreen';
+
+import AddressInput from './AddressInput';
 
 const libraries = ["places"];
 
@@ -20,8 +16,8 @@ const App = () => {
 
 
   return (
-    <View style={styles.container}>
-      <InventoryScreen />
+    <View>
+      <AddressInput />
     </View>
   )
 

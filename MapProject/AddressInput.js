@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const AddressInput = () => {
@@ -10,8 +10,12 @@ const AddressInput = () => {
     };
 
     return (
-        <View>
-            <View style={{ zIndex: 1000, flex: 1, paddingVertical: 60 }}>
+        <View style={{ paddingVertical: 60 }}>
+            <View style={{ zIndex: 999, width: '80%', alignSelf: 'center' }}>
+                <Text>Address</Text>
+            </View>
+
+            <View style={{ zIndex: 1000, flex: 1, marginBottom: 60 }}>
                 <GooglePlacesAutocomplete
                     styles={{
                         container: {
@@ -60,14 +64,39 @@ const AddressInput = () => {
                 />
 
             </View>
-            <View style={{ zIndex: 999 }}>
+            <View style={{ zIndex: 999, width: '80%', alignSelf: 'center' }}>
+                <Text>City</Text>
+                <TextInput style={styles.textInput}></TextInput>
+                <Text>Province</Text>
+                <TextInput style={styles.textInput}></TextInput>
+                <Text>Postal Code</Text>
+                <TextInput style={styles.textInput}></TextInput>
+                <Text>Country</Text>
+                <TextInput style={styles.textInput}></TextInput>
                 <Button title="Submit" onPress={handlePress} />
-                {location ? <Text>Selected Location: {location}</Text> : null}
-                <Text>Address Input</Text>
             </View>
         </View>
 
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#008000',
+    },
+    textInput: {
+        backgroundColor: '#008000',
+        color: '#5d5d5d',
+        fontSize: 16,
+        paddingHorizontal: 10,
+        marginVertical: 5,
+        elevation: 1,
+        height: 44, // Adjusted height to match the autocomplete input field
+        borderRadius: 8, // Added rounded corners
+    },
+});
 
 export default AddressInput;

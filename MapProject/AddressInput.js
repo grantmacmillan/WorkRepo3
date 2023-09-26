@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -11,6 +11,8 @@ const AddressInput = () => {
     const [province, setProvince] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [country, setCountry] = useState('');
+
+    const autocompleteRef = useRef(null);
 
     const handlePress = (data, details = null) => {
         console.log(data, details);
@@ -25,6 +27,13 @@ const AddressInput = () => {
         setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name);
         setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name);
     };
+
+    useEffect(() => {
+        // Watch for changes to address1 state and update input text
+        if (address1) {
+            autocompleteRef.current?.setAddressText(address1);
+        }
+    }, [address1]);
 
     const handleSave = () => {
         console.log('address: ' + address1 + ' ' + address2 + ' ' + city + ' ' + province + ' ' + postalCode + ' ' + country);
@@ -68,7 +77,8 @@ const AddressInput = () => {
                             backgroundColor: '#008000', // Ensure each row is not transparent
                         },
                     }}
-                    placeholder={address1 || 'Enter Location'}
+                    ref={autocompleteRef}
+                    placeholder='Enter Location'
                     onPress={handlePress}
                     query={{
                         key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // Please replace with your actual API key

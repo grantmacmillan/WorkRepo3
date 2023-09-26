@@ -11,7 +11,7 @@ const AddressInput = () => {
 
     return (
         <View>
-            <View style={{ flex: 1, paddingVertical: 60 }}>
+            <View style={{ zIndex: 1000, flex: 1, paddingVertical: 60 }}>
                 <GooglePlacesAutocomplete
                     styles={{
                         container: {

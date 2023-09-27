@@ -112,7 +112,10 @@ const AddressInput = () => {
                 <Text>Address Line 1</Text>
             </View>
 
-            <View style={{}}>
+            <View style={{
+                position: 'relative', zIndex: 1000,
+                elevation: 5,
+            }}>
                 <TextInput
                     style={{
                         borderRadius: 8,
@@ -122,27 +125,36 @@ const AddressInput = () => {
                     }}
                     onChangeText={setInput}
                     placeholder='Enter Address'
-                //value={address1}
                 />
-                <FlatList
-                    data={predictions}
-                    keyExtractor={(item) => item.place_id}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            onPress={() => handlePress(item.place_id)}
-                            style={{
-                                zIndex: 1000,
-                                elevation: 5,
-                                backgroundColor: '#adbce6',
-                                borderRadius: 8,
-                                margin: 5,
-                                padding: 10,
-                            }}
-                        >
-                            <Text>{item.description}</Text>
-                        </TouchableOpacity>
-                    )}
-                />
+
+                {predictions.length > 0 && (
+                    <FlatList
+                        style={{
+                            position: 'absolute',
+                            top: 45,
+
+
+                            width: '100%',
+                            zIndex: 1000,
+                            elevation: 5,
+                            backgroundColor: '#adbce6',
+                            borderRadius: 8,
+                        }}
+                        data={predictions}
+                        keyExtractor={(item) => item.place_id}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                                onPress={() => handlePress(item.place_id)}
+                                style={{
+                                    margin: 5,
+                                    padding: 10,
+                                }}
+                            >
+                                <Text>{item.description}</Text>
+                            </TouchableOpacity>
+                        )}
+                    />
+                )}
             </View>
 
             <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>

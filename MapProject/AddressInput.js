@@ -124,24 +124,19 @@ const AddressInput = () => {
     };
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', width: "100%", marginVertical: 50 }}>
-
+        <TouchableOpacity
+            style={{ flex: 1, justifyContent: 'center', width: "100%", marginVertical: 50 }}
+            activeOpacity={1} // to prevent any opacity change
+            onPress={() => predictions.length > 0 && setPredictions([])} // clear predictions when anything outside FlatList is pressed
+        >
             <View style={{ flex: 1 }}>
                 <View>
                     <Text>Address Line 1</Text>
                 </View>
 
-                <View
-                    style={{
-                        position: 'relative',
-                        zIndex: 1000,
-                        elevation: 5,
-                    }}
-
-                >
+                <View style={{ position: 'relative', zIndex: 1000, elevation: 5 }}>
                     <TextInput
                         style={{
-
                             borderRadius: 8,
                             backgroundColor: '#ADD8E6',
                             fontSize: 16,
@@ -166,11 +161,11 @@ const AddressInput = () => {
                             keyExtractor={(item) => item.place_id}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
-                                    onPress={() => handlePress(item.place_id)}
-                                    style={{
-                                        margin: 5,
-                                        padding: 10,
+                                    onPress={(e) => {
+                                        e.stopPropagation(); // stop event propagation to prevent the outer TouchableOpacity from handling this press
+                                        handlePress(item.place_id);
                                     }}
+                                    style={{ margin: 5, padding: 10 }}
                                 >
                                     <Text>{item.description}</Text>
                                 </TouchableOpacity>
@@ -240,7 +235,8 @@ const AddressInput = () => {
                 </View>
             </View>
 
-        </View>
+
+        </TouchableOpacity>
     );
 };
 

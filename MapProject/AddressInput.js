@@ -17,15 +17,15 @@ const AddressInput = () => {
     const handlePress = (data, details = null) => {
         console.log(data, details);
 
-        // Extract relevant address components from details and set them to state variables
+        // Gets the required address components from the details object. IMPORTANT: ensure the details object is not null by adding ||'' to the end of each line.
         const addressComponents = details?.address_components || [];
         setAddress1(addressComponents?.find(item => item.types.includes('street_number'))?.long_name + ' ' +
-            addressComponents?.find(item => item.types.includes('route'))?.long_name);
-        setAddress2(addressComponents?.find(item => item.types.includes('sublocality_level_1'))?.long_name);
-        setCity(addressComponents?.find(item => item.types.includes('locality'))?.long_name);
-        setProvince(addressComponents?.find(item => item.types.includes('administrative_area_level_1'))?.long_name);
-        setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name);
-        setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name);
+            addressComponents?.find(item => item.types.includes('route'))?.long_name || '');
+        setAddress2(addressComponents?.find(item => item.types.includes('sublocality_level_1'))?.long_name || '');
+        setCity(addressComponents?.find(item => item.types.includes('locality'))?.long_name || '');
+        setProvince(addressComponents?.find(item => item.types.includes('administrative_area_level_1'))?.long_name || '');
+        setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name || '');
+        setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name || '');
     };
 
     useEffect(() => {

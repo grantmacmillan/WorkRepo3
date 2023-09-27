@@ -50,6 +50,10 @@ const AddressInput = () => {
         return () => clearTimeout(debounceTimeout); // Clear the timeout on component unmount
     }, [input]);
 
+    useEffect(() => {
+        setInput(address1);
+    }, [address1]);
+
 
 
     const handlePress = async (placeId) => {
@@ -81,6 +85,8 @@ const AddressInput = () => {
                 setProvince(addressComponents?.find(item => item.types.includes('administrative_area_level_1'))?.long_name || '');
                 setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name || '');
                 setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name || '');
+
+                //setInput(address1);
             } else {
                 console.error('Error fetching place details:', data.status);
             }
@@ -124,6 +130,7 @@ const AddressInput = () => {
                             padding: 10,
                         }}
                         onChangeText={setInput}
+                        value={input}
                         placeholder='Enter Address'
                     />
 

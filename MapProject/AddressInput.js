@@ -45,7 +45,7 @@ const AddressInput = () => {
             }
 
 
-        }, 300); // 300ms delay, helps alot with performance
+        }, 100); // 100ms delay, helps alot with performance
 
         return () => clearTimeout(debounceTimeout); // Clear the timeout on component unmount
     }, [input]);

@@ -124,7 +124,7 @@ const AddressInput = () => {
     };
 
     return (
-        <View style={{ flex: 1, marginVertical: 'auto', width: "100%" }}>
+        <View style={{ flex: 1, justifyContent: 'center', width: "100%", marginVertical: 50 }}>
 
             <View style={{ flex: 1 }}>
                 <View>
@@ -179,7 +179,7 @@ const AddressInput = () => {
                     )}
                 </View>
 
-                <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
+                <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center', overflow: 'visible' }}>
                     <Text>Address Line 2</Text>
                     <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
 

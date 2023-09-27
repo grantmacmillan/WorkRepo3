@@ -27,8 +27,15 @@ const AddressInput = () => {
         const debounceTimeout = setTimeout(async () => {
             if (!input) return;
             try {
+                let tempURL = '';
+                if (Platform.OS === 'web') {
+                    tempURL = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${API_KEY}&components=country:ca`;
+                }
+                else {
+                    tempURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${API_KEY}&components=country:ca`;
+                }
 
-                const apiUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${API_KEY}&components=country:ca`;
+                const apiUrl = tempURL;
                 const response = await fetch(apiUrl);
                 const data = await response.json();
 
@@ -54,7 +61,17 @@ const AddressInput = () => {
         setPredictions([]);
         try {
 
-            const placeDetailsUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&fields=address_component`;
+            let tempURL = '';
+
+            if (Platform.OS === 'web') {
+                tempURL = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&fields=address_component`;
+            }
+            else {
+                tempURL = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&fields=address_component`;
+            }
+
+
+            const placeDetailsUrl = tempURL;
 
             const response = await fetch(placeDetailsUrl);
             const data = await response.json();
@@ -108,124 +125,121 @@ const AddressInput = () => {
 
     return (
         <View style={{ flex: 1, marginVertical: 'auto', width: "100%" }}>
-            <TouchableWithoutFeedback onPress={() => predictions.length > 0 && setPredictions([])}>
-                <View style={{ flex: 1 }}>
-                    <View>
-                        <Text>Address Line 1</Text>
-                    </View>
 
-                    <View
+            <View style={{ flex: 1 }}>
+                <View>
+                    <Text>Address Line 1</Text>
+                </View>
+
+                <View
+                    style={{
+                        position: 'relative',
+                        zIndex: 1000,
+                        elevation: 5,
+                    }}
+
+                >
+                    <TextInput
                         style={{
-                            position: 'relative',
-                            zIndex: 1000,
-                            elevation: 5,
+
+                            borderRadius: 8,
+                            backgroundColor: '#ADD8E6',
+                            fontSize: 16,
+                            padding: 10,
                         }}
-                        onStartShouldSetResponderCapture={() => {
-                            // Prevent this touch event from being "captured" by the parent TouchableWithoutFeedback
-                            return predictions.length > 0;
-                        }}
-                    >
-                        <TextInput
+                        onChangeText={setInput}
+                        placeholder='Enter Address'
+                    />
+
+                    {predictions.length > 0 && (
+                        <FlatList
                             style={{
-
+                                position: 'absolute',
+                                top: 45,
+                                width: '100%',
+                                zIndex: 1000,
+                                elevation: 5,
+                                backgroundColor: '#adbce6',
                                 borderRadius: 8,
-                                backgroundColor: '#ADD8E6',
-                                fontSize: 16,
-                                padding: 10,
                             }}
-                            onChangeText={setInput}
-                            placeholder='Enter Address'
+                            data={predictions}
+                            keyExtractor={(item) => item.place_id}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity
+                                    onPress={() => handlePress(item.place_id)}
+                                    style={{
+                                        margin: 5,
+                                        padding: 10,
+                                    }}
+                                >
+                                    <Text>{item.description}</Text>
+                                </TouchableOpacity>
+                            )}
                         />
+                    )}
+                </View>
 
-                        {predictions.length > 0 && (
-                            <FlatList
-                                style={{
-                                    position: 'absolute',
-                                    top: 45,
-                                    width: '100%',
-                                    zIndex: 1000,
-                                    elevation: 5,
-                                    backgroundColor: '#adbce6',
-                                    borderRadius: 8,
-                                }}
-                                data={predictions}
-                                keyExtractor={(item) => item.place_id}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity
-                                        onPress={() => handlePress(item.place_id)}
-                                        style={{
-                                            margin: 5,
-                                            padding: 10,
-                                        }}
-                                    >
-                                        <Text>{item.description}</Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                        )}
+                <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
+                    <Text>Address Line 2</Text>
+                    <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flex: 1, marginRight: 10 }}>
+                            <Text>City</Text>
+                            <TextInput style={styles.textInput} value={city} onChangeText={setCity} />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Text>Province</Text>
+                            <TextInput style={styles.textInput} value={province} onChangeText={setProvince} />
+                        </View>
                     </View>
 
-                    <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
-                        <Text>Address Line 2</Text>
-                        <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flex: 1, marginRight: 10 }}>
-                                <Text>City</Text>
-                                <TextInput style={styles.textInput} value={city} onChangeText={setCity} />
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <Text>Province</Text>
-                                <TextInput style={styles.textInput} value={province} onChangeText={setProvince} />
-                            </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flex: 1, marginRight: 10 }}>
+                            <Text>Postal Code</Text>
+                            <TextInput style={styles.textInput} value={postalCode} onChangeText={setPostalCode} />
                         </View>
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flex: 1, marginRight: 10 }}>
-                                <Text>Postal Code</Text>
-                                <TextInput style={styles.textInput} value={postalCode} onChangeText={setPostalCode} />
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <Text>Country</Text>
-                                <TextInput style={styles.textInput} value={country} onChangeText={setCountry} />
-                            </View>
+                        <View style={{ flex: 1 }}>
+                            <Text>Country</Text>
+                            <TextInput style={styles.textInput} value={country} onChangeText={setCountry} />
                         </View>
+                    </View>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flex: 1, marginRight: 10 }}>
-                                <Pressable
-                                    onPress={handleClear}
-                                    style={({ pressed }) => ({
-                                        backgroundColor: pressed ? 'white' : 'orange',
-                                        paddingVertical: 10,
-                                        paddingHorizontal: 20,
-                                        borderRadius: 5,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    })}
-                                >
-                                    <Text style={{ color: 'white', fontSize: 16 }}>Clear</Text>
-                                </Pressable>
-                            </View>
-                            <View style={{ flex: 1 }}>
-                                <Pressable
-                                    onPress={handleSave}
-                                    style={({ pressed }) => ({
-                                        backgroundColor: pressed ? 'white' : 'blue',
-                                        paddingVertical: 10,
-                                        paddingHorizontal: 20,
-                                        borderRadius: 5,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    })}
-                                >
-                                    <Text style={{ color: 'white', fontSize: 16 }}>Save</Text>
-                                </Pressable>
-                            </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ flex: 1, marginRight: 10 }}>
+                            <Pressable
+                                onPress={handleClear}
+                                style={({ pressed }) => ({
+                                    backgroundColor: pressed ? 'white' : 'orange',
+                                    paddingVertical: 10,
+                                    paddingHorizontal: 20,
+                                    borderRadius: 5,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                })}
+                            >
+                                <Text style={{ color: 'white', fontSize: 16 }}>Clear</Text>
+                            </Pressable>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Pressable
+                                onPress={handleSave}
+                                style={({ pressed }) => ({
+                                    backgroundColor: pressed ? 'white' : 'blue',
+                                    paddingVertical: 10,
+                                    paddingHorizontal: 20,
+                                    borderRadius: 5,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                })}
+                            >
+                                <Text style={{ color: 'white', fontSize: 16 }}>Save</Text>
+                            </Pressable>
                         </View>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </View>
+
         </View>
     );
 };

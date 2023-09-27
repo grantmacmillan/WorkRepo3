@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, Pressable, TextInput, StyleSheet, Platform } from 'react-native';
+import { View, Text, Button, Pressable, TextInput, StyleSheet, Platform, FlatList, TouchableOpacity } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import axios from 'axios';
 
 const AddressInput = () => {
 
+
+
+    const API_KEY = "AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo";
     const [address1, setAddress1] = useState('');
     const [address2, setAddress2] = useState('');
     const [city, setCity] = useState('');
@@ -11,22 +15,65 @@ const AddressInput = () => {
     const [postalCode, setPostalCode] = useState('');
     const [country, setCountry] = useState('');
 
+    const [input, setInput] = useState('');
+
     // Reference to the GooglePlacesAutocomplete component. Used to set the address text when the user presses the autocomplete prediction.
     const autocompleteRef = useRef(null);
 
-    const handlePress = (data, details = null) => {
-        console.log(data, details);
 
-        // Gets the required address components from the details object. IMPORTANT: ensure the details object is not null by adding ||'' to the end of each line.
-        const addressComponents = details?.address_components || [];
-        setAddress1(addressComponents?.find(item => item.types.includes('street_number'))?.long_name + ' ' +
-            addressComponents?.find(item => item.types.includes('route'))?.long_name || '');
-        setAddress2(addressComponents?.find(item => item.types.includes('sublocality_level_1'))?.long_name || '');
-        setCity(addressComponents?.find(item => item.types.includes('locality'))?.long_name || '');
-        setProvince(addressComponents?.find(item => item.types.includes('administrative_area_level_1'))?.long_name || '');
-        setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name || '');
-        setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name || '');
+    const [predictions, setPredictions] = useState([]);
+
+    useEffect(() => {
+        async function fetchPlaces() {
+            if (!input) return;
+            try {
+
+                const apiUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${API_KEY}&components=country:ca`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status === 'OK') {
+                    setPredictions(data.predictions);
+                } else {
+                    console.error('Error fetching places:', data.status);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        fetchPlaces();
+    }, [input]);
+
+
+
+    const handlePress = async (placeId) => {
+        console.log('Selected Place:', placeId);
+
+        try {
+
+            const placeDetailsUrl = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&fields=address_component`;
+
+            const response = await fetch(placeDetailsUrl);
+            const data = await response.json();
+
+            if (data.status === 'OK') {
+                const addressComponents = data.result.address_components;
+                setAddress1(addressComponents?.find(item => item.types.includes('street_number'))?.long_name + ' ' +
+                    addressComponents?.find(item => item.types.includes('route'))?.long_name || '');
+                setAddress2(addressComponents?.find(item => item.types.includes('sublocality_level_1'))?.long_name || '');
+                setCity(addressComponents?.find(item => item.types.includes('locality'))?.long_name || '');
+                setProvince(addressComponents?.find(item => item.types.includes('administrative_area_level_1'))?.long_name || '');
+                setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name || '');
+                setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name || '');
+            } else {
+                console.error('Error fetching place details:', data.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
+
 
     useEffect(() => {
         // this use effect statement is used for setting the address text when the user presses the autocomplete prediction.
@@ -58,60 +105,39 @@ const AddressInput = () => {
     };
 
     return (
-        <View style={{ alignSelf: 'center', elevation: 0, width: '100%' }}>
-            <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center' }}>
+        <View style={{ flex: 1, marginVertical: 'auto' }}>
+            <View>
                 <Text>Address Line 1</Text>
             </View>
 
-            <View style={{ zIndex: 1000, elevation: 1, flex: 1, marginVertical: 'auto' }}>
-                <GooglePlacesAutocomplete
-                    styles={{
-                        container: {
-                            elevation: 1,
-                            zIndex: 1000,
-                        },
-                        textInputContainer: {
-                            borderRadius: 8,
-                        },
-                        textInput: {
-                            borderRadius: 8,
-                            backgroundColor: '#ADD8E6',
-                            fontSize: 16,
-                        },
-                        listView: {
-                            position: 'absolute',
-                            elevation: 5,
-                            zIndex: 1000,
-                            top: 50,
-                            width: '80%',
-                            alignSelf: 'left',
-                            backgroundColor: '#adbce6', // Set background color to white or any other color
-                            borderRadius: 8,
-                        },
-                        row: {
-                            zIndex: 1000,
-                            elevation: 5,
-                            backgroundColor: '#adbce6', // Ensure each row is not transparent
-                            borderRadius: 8,
-                        },
+            <View style={{ flex: 1 }}>
+                <TextInput
+                    style={{
+                        borderRadius: 8,
+                        backgroundColor: '#ADD8E6',
+                        fontSize: 16,
+                        padding: 10,
                     }}
-                    ref={autocompleteRef}
-                    placeholder='Enter Adress'
-                    onPress={handlePress}
-                    query={{
-                        key: 'API_KEY_HERE', // GRANTS API KEY
-                        language: 'en',
-                        components: 'country:ca', // Limit results to Canada
-                    }}
-                    //Request URL is needed for desktop web platform. Use this to bypass CORS errors.
-                    requestUrl={{
-                        url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // Proxy URL, found on api documentation. Use this to bypass CORS errors.
-                        useOnPlatform: 'web', // Use this URL for the web platform
-                    }}
-                    fetchDetails={true}
-                    preProcessPredictions={(predictions) => {
-                        return predictions.slice(0, 5);
-                    }}
+                    onChangeText={setInput}
+                    placeholder='Enter Address'
+                />
+                <FlatList
+                    data={predictions}
+                    keyExtractor={(item) => item.place_id}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity
+                            onPress={() => handlePress(item.place_id)}
+                            style={{
+                                elevation: 5,
+                                backgroundColor: '#adbce6',
+                                borderRadius: 8,
+                                margin: 5,
+                                padding: 10,
+                            }}
+                        >
+                            <Text>{item.description}</Text>
+                        </TouchableOpacity>
+                    )}
                 />
             </View>
 

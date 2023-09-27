@@ -16,7 +16,7 @@ const App = () => {
 
 
   return (
-    <View>
+    <View style={styles.container}>
       <AddressInput />
     </View>
   )

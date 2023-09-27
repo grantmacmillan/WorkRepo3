@@ -40,28 +40,30 @@ const AddressInput = () => {
     };
 
     return (
-        <View style={{ paddingVertical: 60 }}>
-            <View style={{ zIndex: 999, width: '80%', alignSelf: 'center' }}>
+        <View style={{ alignSelf: 'center', width: '100%' }}>
+            <View style={{ zIndex: 999, width: '100%', alignSelf: 'center' }}>
                 <Text>Address Line 1</Text>
             </View>
 
-            <View style={{ zIndex: 1000, flex: 1, marginBottom: 60 }}>
+            <View style={{ zIndex: 1000, flex: 1, marginVertical: 'auto' }}>
                 <GooglePlacesAutocomplete
                     styles={{
                         container: {
                             elevation: 1,
                             zIndex: 1000,
-                            backgroundColor: '#008000',
-                            width: '80%',
+
+                            width: '100%',
                             alignSelf: 'center',
                         },
                         textInputContainer: {
-                            backgroundColor: '#008000',
+                            backgroundColor: 'white',
                             width: '100%',
+                            borderRadius: 8,
                         },
                         textInput: {
+                            borderRadius: 8,
                             backgroundColor: '#008000',
-                            color: '#5d5d5d',
+                            color: 'yellow',
                             fontSize: 16,
                         },
                         listView: {
@@ -70,11 +72,13 @@ const AddressInput = () => {
                             top: 50,
                             width: '80%',
                             alignSelf: 'center',
-                            backgroundColor: '#008000', // Set background color to white or any other color
+                            backgroundColor: 'red', // Set background color to white or any other color
+                            borderRadius: 8,
                         },
                         row: {
                             zIndex: 1000,
-                            backgroundColor: '#008000', // Ensure each row is not transparent
+                            backgroundColor: 'red', // Ensure each row is not transparent
+                            borderRadius: 8,
                         },
                     }}
                     ref={autocompleteRef}
@@ -83,6 +87,10 @@ const AddressInput = () => {
                     query={{
                         key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // Please replace with your actual API key
                         language: 'en',
+                    }}
+                    requestUrl={{
+                        url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // Proxy URL, found on api documentation. Use this to bypass CORS errors.
+                        useOnPlatform: 'web', // Use this URL for the web platform
                     }}
                     fetchDetails={true}
                     preProcessPredictions={(predictions) => {
@@ -93,8 +101,8 @@ const AddressInput = () => {
                 />
 
             </View>
-            <View style={{ zIndex: 999, width: '80%', alignSelf: 'center' }}>
-                <Text>Address Line 2</Text>
+            <View style={{ zIndex: 999, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: 50 }}>
+                <Text >Address Line 2</Text>
                 <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
                 <Text>City</Text>
                 <TextInput style={styles.textInput} value={city} onChangeText={setCity} />
@@ -131,7 +139,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#008000',
     },
     textInput: {
-        backgroundColor: '#008000',
+        backgroundColor: 'pink',
         color: '#5d5d5d',
         fontSize: 16,
         paddingHorizontal: 10,

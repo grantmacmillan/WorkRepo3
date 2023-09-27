@@ -99,7 +99,7 @@ const AddressInput = () => {
                     placeholder='Enter Adress'
                     onPress={handlePress}
                     query={{
-                        key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // GRANTS API KEY
+                        key: 'API_KEY_HERE', // GRANTS API KEY
                         language: 'en',
                         components: 'country:ca', // Limit results to Canada
                     }}

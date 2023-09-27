@@ -39,8 +39,8 @@ const AddressInput = () => {
     };
 
     return (
-        <View style={{ alignSelf: 'center', width: '100%' }}>
-            <View style={{ zIndex: 999, width: '100%', alignSelf: 'center' }}>
+        <View style={{ alignSelf: 'center', elevation: 0, width: '100%' }}>
+            <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center' }}>
                 <Text>Address Line 1</Text>
             </View>
 
@@ -67,7 +67,7 @@ const AddressInput = () => {
                         },
                         listView: {
                             position: 'absolute',
-                            elevation: 1,
+                            elevation: 5,
                             zIndex: 1000,
                             top: 50,
                             width: '80%',
@@ -77,7 +77,7 @@ const AddressInput = () => {
                         },
                         row: {
                             zIndex: 1000,
-                            elevation: 1,
+                            elevation: 5,
                             backgroundColor: 'red', // Ensure each row is not transparent
                             borderRadius: 8,
                         },
@@ -103,7 +103,7 @@ const AddressInput = () => {
                 />
 
             </View>
-            <View style={{ zIndex: 999, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
+            <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
                 <Text>Address Line 2</Text>
                 <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, Pressable, TextInput, StyleSheet } from 'react-native';
+import { View, Text, Button, Pressable, TextInput, StyleSheet, Platform } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const AddressInput = () => {
@@ -101,7 +101,7 @@ const AddressInput = () => {
                 />
 
             </View>
-            <View style={{ zIndex: 999, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: 50 }}>
+            <View style={{ zIndex: 999, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
                 <Text >Address Line 2</Text>
                 <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
                 <Text>City</Text>

@@ -17,10 +17,6 @@ const AddressInput = () => {
 
     const [input, setInput] = useState('');
 
-    // Reference to the GooglePlacesAutocomplete component. Used to set the address text when the user presses the autocomplete prediction.
-    const autocompleteRef = useRef(null);
-
-
     const [predictions, setPredictions] = useState([]);
 
     useEffect(() => {
@@ -93,14 +89,6 @@ const AddressInput = () => {
         }
     };
 
-
-    useEffect(() => {
-        // this use effect statement is used for setting the address text when the user presses the autocomplete prediction.
-        if (address1) {
-            autocompleteRef.current?.setAddressText(address1);
-        }
-    }, [address1]);
-
     const handleClear = () => {
         // Clear all the address state variables
         setAddress1('');
@@ -109,13 +97,6 @@ const AddressInput = () => {
         setProvince('');
         setPostalCode('');
         setCountry('');
-
-        // Clear the text in GooglePlacesAutocomplete if needed
-        if (autocompleteRef.current) {
-            // Check if the library has a method to clear the input, or if there is a property you can set
-            // If not directly available, consult the library documentation or look for alternative ways
-            autocompleteRef.current.setAddressText('');
-        }
     };
 
     const handleSave = () => {

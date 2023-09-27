@@ -7,7 +7,7 @@ const AddressInput = () => {
 
 
 
-    const API_KEY = "AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo";
+    const API_KEY = "AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"; //GRANTS API KEY - DO NOT SHARE
     const [address1, setAddress1] = useState('');
     const [address2, setAddress2] = useState('');
     const [city, setCity] = useState('');
@@ -107,7 +107,7 @@ const AddressInput = () => {
     };
 
     return (
-        <View style={{ flex: 1, marginVertical: 'auto' }}>
+        <View style={{ flex: 1, marginVertical: 'auto', width: "100%" }}>
             <TouchableWithoutFeedback onPress={() => predictions.length > 0 && setPredictions([])}>
                 <View style={{ flex: 1 }}>
                     <View>
@@ -127,6 +127,7 @@ const AddressInput = () => {
                     >
                         <TextInput
                             style={{
+
                                 borderRadius: 8,
                                 backgroundColor: '#ADD8E6',
                                 fontSize: 16,

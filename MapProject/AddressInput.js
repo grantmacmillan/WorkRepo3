@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, Pressable, TextInput, StyleSheet, Platform, FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Pressable, TextInput, StyleSheet, Platform, FlatList, TouchableOpacity } from 'react-native';
 
 const AddressInput = () => {
-
-
-
     const API_KEY = "AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"; //GRANTS API KEY - DO NOT SHARE
+
     const [address1, setAddress1] = useState('');
     const [address2, setAddress2] = useState('');
     const [city, setCity] = useState('');
@@ -16,7 +12,6 @@ const AddressInput = () => {
     const [country, setCountry] = useState('');
 
     const [input, setInput] = useState('');
-
     const [predictions, setPredictions] = useState([]);
 
     useEffect(() => {
@@ -54,23 +49,18 @@ const AddressInput = () => {
         setInput(address1);
     }, [address1]);
 
-
-
     const handlePress = async (placeId) => {
         console.log('Selected Place:', placeId);
-        setPredictions([]);
+        setPredictions([]); //clear predictions after a place is selected
+
         try {
-
             let tempURL = '';
-
             if (Platform.OS === 'web') {
                 tempURL = `https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&fields=address_component`;
             }
             else {
                 tempURL = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${API_KEY}&fields=address_component`;
             }
-
-
             const placeDetailsUrl = tempURL;
 
             const response = await fetch(placeDetailsUrl);
@@ -78,6 +68,7 @@ const AddressInput = () => {
 
             if (data.status === 'OK') {
                 const addressComponents = data.result.address_components;
+                //setting address state variables based on the address components returned from the google API
                 setAddress1(addressComponents?.find(item => item.types.includes('street_number'))?.long_name + ' ' +
                     addressComponents?.find(item => item.types.includes('route'))?.long_name || '');
                 setAddress2(addressComponents?.find(item => item.types.includes('sublocality_level_1'))?.long_name || '');
@@ -85,8 +76,6 @@ const AddressInput = () => {
                 setProvince(addressComponents?.find(item => item.types.includes('administrative_area_level_1'))?.long_name || '');
                 setPostalCode(addressComponents?.find(item => item.types.includes('postal_code'))?.long_name || '');
                 setCountry(addressComponents?.find(item => item.types.includes('country'))?.long_name || '');
-
-                //setInput(address1);
             } else {
                 console.error('Error fetching place details:', data.status);
             }
@@ -222,8 +211,6 @@ const AddressInput = () => {
                     </View>
                 </View>
             </View>
-
-
         </TouchableOpacity>
     );
 };

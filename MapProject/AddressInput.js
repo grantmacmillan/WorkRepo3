@@ -3,7 +3,6 @@ import { View, Text, Button, Pressable, TextInput, StyleSheet, Platform } from '
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const AddressInput = () => {
-    const [location, setLocation] = useState('');
 
     const [address1, setAddress1] = useState('');
     const [address2, setAddress2] = useState('');
@@ -29,7 +28,7 @@ const AddressInput = () => {
     };
 
     useEffect(() => {
-        // Watch for changes to address1 state and update input text
+        // this use effect statement is used for setting the address text when the user presses the autocomplete prediction.
         if (address1) {
             autocompleteRef.current?.setAddressText(address1);
         }
@@ -45,7 +44,7 @@ const AddressInput = () => {
                 <Text>Address Line 1</Text>
             </View>
 
-            <View style={{ zIndex: 1000, flex: 1, marginVertical: 'auto' }}>
+            <View style={{ zIndex: 1000, elevation: 1, flex: 1, marginVertical: 'auto' }}>
                 <GooglePlacesAutocomplete
                     styles={{
                         container: {
@@ -68,6 +67,7 @@ const AddressInput = () => {
                         },
                         listView: {
                             position: 'absolute',
+                            elevation: 1,
                             zIndex: 1000,
                             top: 50,
                             width: '80%',
@@ -77,6 +77,7 @@ const AddressInput = () => {
                         },
                         row: {
                             zIndex: 1000,
+                            elevation: 1,
                             backgroundColor: 'red', // Ensure each row is not transparent
                             borderRadius: 8,
                         },
@@ -85,8 +86,9 @@ const AddressInput = () => {
                     placeholder='Enter Location'
                     onPress={handlePress}
                     query={{
-                        key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // Please replace with your actual API key
+                        key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // GRANTS API KEY
                         language: 'en',
+                        components: 'country:ca', // Limit results to Canada
                     }}
                     requestUrl={{
                         url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // Proxy URL, found on api documentation. Use this to bypass CORS errors.
@@ -102,16 +104,31 @@ const AddressInput = () => {
 
             </View>
             <View style={{ zIndex: 999, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
-                <Text >Address Line 2</Text>
+                <Text>Address Line 2</Text>
                 <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
-                <Text>City</Text>
-                <TextInput style={styles.textInput} value={city} onChangeText={setCity} />
-                <Text>Province</Text>
-                <TextInput style={styles.textInput} value={province} onChangeText={setProvince} />
-                <Text>Postal Code</Text>
-                <TextInput style={styles.textInput} value={postalCode} onChangeText={setPostalCode} />
-                <Text>Country</Text>
-                <TextInput style={styles.textInput} value={country} onChangeText={setCountry} />
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flex: 1, marginRight: 10 }}>
+                        <Text>City</Text>
+                        <TextInput style={styles.textInput} value={city} onChangeText={setCity} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text>Province</Text>
+                        <TextInput style={styles.textInput} value={province} onChangeText={setProvince} />
+                    </View>
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flex: 1, marginRight: 10 }}>
+                        <Text>Postal Code</Text>
+                        <TextInput style={styles.textInput} value={postalCode} onChangeText={setPostalCode} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Text>Country</Text>
+                        <TextInput style={styles.textInput} value={country} onChangeText={setCountry} />
+                    </View>
+                </View>
+
                 <Pressable
                     onPress={handleSave}
                     style={({ pressed }) => ({
@@ -133,6 +150,7 @@ const AddressInput = () => {
 
 const styles = StyleSheet.create({
     container: {
+        elevation: 0,
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -144,7 +162,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingHorizontal: 10,
         marginVertical: 5,
-        elevation: 1,
         height: 44, // Adjusted height to match the autocomplete input field
         borderRadius: 8, // Added rounded corners
     },

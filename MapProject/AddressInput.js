@@ -24,7 +24,7 @@ const AddressInput = () => {
     const [predictions, setPredictions] = useState([]);
 
     useEffect(() => {
-        async function fetchPlaces() {
+        const debounceTimeout = setTimeout(async () => {
             if (!input) return;
             try {
 
@@ -40,9 +40,11 @@ const AddressInput = () => {
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
 
-        fetchPlaces();
+
+        }, 300); // 300ms delay, helps alot with performance
+
+        return () => clearTimeout(debounceTimeout); // Clear the timeout on component unmount
     }, [input]);
 
 
@@ -110,7 +112,7 @@ const AddressInput = () => {
                 <Text>Address Line 1</Text>
             </View>
 
-            <View style={{ flex: 1 }}>
+            <View style={{}}>
                 <TextInput
                     style={{
                         borderRadius: 8,
@@ -120,6 +122,7 @@ const AddressInput = () => {
                     }}
                     onChangeText={setInput}
                     placeholder='Enter Address'
+                //value={address1}
                 />
                 <FlatList
                     data={predictions}
@@ -128,6 +131,7 @@ const AddressInput = () => {
                         <TouchableOpacity
                             onPress={() => handlePress(item.place_id)}
                             style={{
+                                zIndex: 1000,
                                 elevation: 5,
                                 backgroundColor: '#adbce6',
                                 borderRadius: 8,

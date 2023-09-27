@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, TextInput, StyleSheet, Platform, FlatList, TouchableOpacity } from 'react-native';
 
 const AddressInput = () => {
-    const API_KEY = "AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo"; //GRANTS API KEY - DO NOT SHARE
+    const API_KEY = "API_KEY"; //GRANTS API KEY - DO NOT SHARE
 
     const [address1, setAddress1] = useState('');
     const [address2, setAddress2] = useState('');

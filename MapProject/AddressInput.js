@@ -11,6 +11,7 @@ const AddressInput = () => {
     const [postalCode, setPostalCode] = useState('');
     const [country, setCountry] = useState('');
 
+    // Reference to the GooglePlacesAutocomplete component. Used to set the address text when the user presses the autocomplete prediction.
     const autocompleteRef = useRef(null);
 
     const handlePress = (data, details = null) => {
@@ -52,6 +53,7 @@ const AddressInput = () => {
     };
 
     const handleSave = () => {
+        // SAVE ADDRESS TO DATABASE HERE
         console.log('address: ' + address1 + ' ' + address2 + ' ' + city + ' ' + province + ' ' + postalCode + ' ' + country);
     };
 
@@ -67,19 +69,13 @@ const AddressInput = () => {
                         container: {
                             elevation: 1,
                             zIndex: 1000,
-
-                            width: '100%',
-                            alignSelf: 'center',
                         },
                         textInputContainer: {
-                            backgroundColor: 'white',
-                            width: '100%',
                             borderRadius: 8,
                         },
                         textInput: {
                             borderRadius: 8,
-                            backgroundColor: '#008000',
-                            color: 'yellow',
+                            backgroundColor: '#ADD8E6',
                             fontSize: 16,
                         },
                         listView: {
@@ -88,25 +84,26 @@ const AddressInput = () => {
                             zIndex: 1000,
                             top: 50,
                             width: '80%',
-                            alignSelf: 'center',
-                            backgroundColor: 'red', // Set background color to white or any other color
+                            alignSelf: 'left',
+                            backgroundColor: '#adbce6', // Set background color to white or any other color
                             borderRadius: 8,
                         },
                         row: {
                             zIndex: 1000,
                             elevation: 5,
-                            backgroundColor: 'red', // Ensure each row is not transparent
+                            backgroundColor: '#adbce6', // Ensure each row is not transparent
                             borderRadius: 8,
                         },
                     }}
                     ref={autocompleteRef}
-                    placeholder='Enter Location'
+                    placeholder='Enter Adress'
                     onPress={handlePress}
                     query={{
                         key: 'AIzaSyDvs-pYzrss81ukHq49-um25r1ZOXK-mHo', // GRANTS API KEY
                         language: 'en',
                         components: 'country:ca', // Limit results to Canada
                     }}
+                    //Request URL is needed for desktop web platform. Use this to bypass CORS errors.
                     requestUrl={{
                         url: 'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // Proxy URL, found on api documentation. Use this to bypass CORS errors.
                         useOnPlatform: 'web', // Use this URL for the web platform
@@ -115,11 +112,9 @@ const AddressInput = () => {
                     preProcessPredictions={(predictions) => {
                         return predictions.slice(0, 5);
                     }}
-
-
                 />
-
             </View>
+
             <View style={{ zIndex: 999, elevation: 0, width: '100%', alignSelf: 'center', overflow: 'visible', marginTop: Platform.OS === 'web' ? 0 : 50 }}>
                 <Text>Address Line 2</Text>
                 <TextInput style={styles.textInput} value={address2} onChangeText={setAddress2} />
@@ -178,11 +173,8 @@ const AddressInput = () => {
                         </Pressable>
                     </View>
                 </View>
-
-
             </View>
         </View>
-
     );
 };
 
@@ -195,13 +187,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#008000',
     },
     textInput: {
-        backgroundColor: 'pink',
-        color: '#5d5d5d',
+        backgroundColor: '#ADD8E6',
+        color: 'black',
         fontSize: 16,
         paddingHorizontal: 10,
         marginVertical: 5,
         height: 44, // Adjusted height to match the autocomplete input field
-        borderRadius: 8, // Added rounded corners
+        borderRadius: 8,
     },
 });
 

@@ -34,6 +34,23 @@ const AddressInput = () => {
         }
     }, [address1]);
 
+    const handleClear = () => {
+        // Clear all the address state variables
+        setAddress1('');
+        setAddress2('');
+        setCity('');
+        setProvince('');
+        setPostalCode('');
+        setCountry('');
+
+        // Clear the text in GooglePlacesAutocomplete if needed
+        if (autocompleteRef.current) {
+            // Check if the library has a method to clear the input, or if there is a property you can set
+            // If not directly available, consult the library documentation or look for alternative ways
+            autocompleteRef.current.setAddressText('');
+        }
+    };
+
     const handleSave = () => {
         console.log('address: ' + address1 + ' ' + address2 + ' ' + city + ' ' + province + ' ' + postalCode + ' ' + country);
     };
@@ -129,19 +146,40 @@ const AddressInput = () => {
                     </View>
                 </View>
 
-                <Pressable
-                    onPress={handleSave}
-                    style={({ pressed }) => ({
-                        backgroundColor: pressed ? 'white' : 'blue',
-                        paddingVertical: 10,
-                        paddingHorizontal: 20,
-                        borderRadius: 5,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    })}
-                >
-                    <Text style={{ color: 'white', fontSize: 16 }}>Save</Text>
-                </Pressable>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flex: 1, marginRight: 10 }}>
+                        <Pressable
+                            onPress={handleClear}
+                            style={({ pressed }) => ({
+                                backgroundColor: pressed ? 'white' : 'orange',
+                                paddingVertical: 10,
+                                paddingHorizontal: 20,
+                                borderRadius: 5,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            })}
+                        >
+                            <Text style={{ color: 'white', fontSize: 16 }}>Clear</Text>
+                        </Pressable>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <Pressable
+                            onPress={handleSave}
+                            style={({ pressed }) => ({
+                                backgroundColor: pressed ? 'white' : 'blue',
+                                paddingVertical: 10,
+                                paddingHorizontal: 20,
+                                borderRadius: 5,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            })}
+                        >
+                            <Text style={{ color: 'white', fontSize: 16 }}>Save</Text>
+                        </Pressable>
+                    </View>
+                </View>
+
+
             </View>
         </View>
 

@@ -51,6 +51,7 @@ const DatePicker = () => {
         for (let i = 1; i <= 7 - remainder; i++) {
             daysData.push({ day: i, isInCurrentMonth: false });
         }
+        console.log(daysData);
         return daysData;
     };
 

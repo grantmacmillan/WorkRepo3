@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Platform } from 'react-native';
 
 import AddressInput from './AddressInput';
+import DateTimePicker from './DateTimePicker';
 
 const libraries = ["places"];
 
@@ -17,7 +18,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <AddressInput />
+      <DateTimePicker />
     </View>
   )
 

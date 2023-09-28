@@ -5,9 +5,10 @@ const DatePicker = () => {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-    //Set to current month and year by default. On the month button press they are changed lower down in the code. 
+    //Set to current month and year and day by default. On the month button press they are changed lower down in the code. 
     const [selectedMonthIndex, setSelectedMonthIndex] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     const nextMonth = () => {
         if (selectedMonthIndex === 11) {
@@ -26,6 +27,13 @@ const DatePicker = () => {
             setSelectedMonthIndex(selectedMonthIndex - 1);
         }
     };
+
+    const handleDateClick = (day) => {
+        const clickedDate = new Date(selectedYear, selectedMonthIndex, day);
+        console.log(clickedDate);
+        setSelectedDate(clickedDate);
+    };
+
 
     const firstDayOfMonth = new Date(selectedYear, selectedMonthIndex, 1).getDay();
     const daysInCurrentMonth = new Date(selectedYear, selectedMonthIndex + 1, 0).getDate();
@@ -47,9 +55,15 @@ const DatePicker = () => {
     };
 
     const renderDay = (day, isInCurrentMonth) => (
-        <View style={[styles.renderDay, { opacity: isInCurrentMonth ? 1 : 0.5 }]}>
+        <Pressable
+            onPress={() => isInCurrentMonth && handleDateClick(day)}
+            style={[styles.renderDay, {
+                opacity: isInCurrentMonth ? 1 : 0.5,
+                backgroundColor: selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === selectedMonthIndex ? 'lightgreen' : 'transparent'
+            }]}
+        >
             {day ? <Text>{day}</Text> : null}
-        </View>
+        </Pressable>
     );
 
     const renderDayHeader = (day, key) => (
@@ -91,7 +105,13 @@ const DatePicker = () => {
 
 const styles = StyleSheet.create({
     renderDay: {
-        flex: 1, padding: 10, borderWidth: 1, borderColor: 'grey', alignItems: 'center'
+        flex: 1,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'grey',
+        alignItems: 'center',
+        justifyContent: 'center', // Ensure content is centered
+        height: '100%', // Ensure it takes the full height available
     },
     renderDayHeader: {
         flex: 1, padding: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0'

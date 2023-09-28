@@ -59,7 +59,7 @@ const DatePicker = () => {
             onPress={() => isInCurrentMonth && handleDateClick(day)}
             style={[styles.renderDay, {
                 opacity: isInCurrentMonth ? 1 : 0.5,
-                backgroundColor: selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === selectedMonthIndex ? 'lightgreen' : 'transparent'
+                backgroundColor: selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === selectedMonthIndex && isInCurrentMonth ? 'lightgreen' : 'transparent'
             }]}
         >
             {day ? <Text>{day}</Text> : null}

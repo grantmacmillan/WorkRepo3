@@ -55,7 +55,7 @@ const DatePicker = () => {
     );
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, width: '100%' }}>
             <Text>Date Picker</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <Pressable onPress={prevMonth} style={{ padding: 10 }}>

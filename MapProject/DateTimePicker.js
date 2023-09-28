@@ -6,7 +6,7 @@ const DateTimePicker = () => {
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, width: '100%' }}>
             <DatePicker />
         </View>
     );

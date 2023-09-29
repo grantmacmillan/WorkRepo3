@@ -8,6 +8,7 @@ const DateTimePicker = () => {
     return (
         <View style={{ flex: 1, width: '100%' }}>
             <DatePicker />
+            <Text style={{ flex: 1 }}>Time Picker</Text>
         </View>
     );
 }

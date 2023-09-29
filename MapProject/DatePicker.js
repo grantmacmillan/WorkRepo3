@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
 
-const DatePicker = () => {
+const DatePicker = ({ selectedDate, setSelectedDate }) => {
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     //Set to current month and year and day by default. On the month button press they are changed lower down in the code. 
     const [selectedMonthIndex, setSelectedMonthIndex] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    //Date that the user selects.
+    //const [selectedDate, setSelectedDate] = useState(new Date());
 
     const nextMonth = () => {
         if (selectedMonthIndex === 11) {
@@ -95,6 +96,7 @@ const DatePicker = () => {
             </View>
 
             <FlatList
+                style={{ flex: 1 }}
                 data={generateDaysData(firstDayOfMonth, daysInPrevMonth, daysInCurrentMonth)}
                 renderItem={({ item }) => renderDay(item.day, item.isInCurrentMonth)}
                 keyExtractor={(item, index) => index.toString()}
@@ -111,8 +113,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'grey',
         alignItems: 'center',
-        justifyContent: 'center', // Ensure content is centered
-        height: '100%', // Ensure it takes the full height available
+        justifyContent: 'center',
+
     },
     renderDayHeader: {
         flex: 1, padding: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0'

@@ -1,9 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
 
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+const Day = ({ day, isInCurrentMonth, isToday, onPress }) => (
+    <Pressable
+        onPress={onPress}
+        style={[styles.renderDay, {
+            opacity: isInCurrentMonth ? 1 : 0.5,
+            backgroundColor: isToday ? 'lightgreen' : 'transparent'
+        }]}
+    >
+        {day ? <Text>{day}</Text> : null}
+    </Pressable>
+);
+
+const DayHeader = ({ day }) => (
+    <View style={styles.renderDayHeader}>
+        <Text style={{ fontWeight: 'bold' }}>{day}</Text>
+    </View>
+);
+
+
 const DatePicker = ({ selectedDate, setSelectedDate }) => {
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
     //Set to current month and year and day by default. On the month button press they are changed lower down in the code. 
     const [selectedMonthIndex, setSelectedMonthIndex] = useState(new Date().getMonth());
@@ -35,12 +55,11 @@ const DatePicker = ({ selectedDate, setSelectedDate }) => {
         setSelectedDate(clickedDate);
     };
 
+    const daysData = useMemo(() => {
+        const firstDayOfMonth = new Date(selectedYear, selectedMonthIndex, 1).getDay();
+        const daysInCurrentMonth = new Date(selectedYear, selectedMonthIndex + 1, 0).getDate();
+        const daysInPrevMonth = new Date(selectedYear, selectedMonthIndex, 0).getDate();
 
-    const firstDayOfMonth = new Date(selectedYear, selectedMonthIndex, 1).getDay();
-    const daysInCurrentMonth = new Date(selectedYear, selectedMonthIndex + 1, 0).getDate();
-    const daysInPrevMonth = new Date(selectedYear, selectedMonthIndex, 0).getDate();
-
-    const generateDaysData = (firstDayOfMonth, daysInPrevMonth, daysInCurrentMonth) => {
         let daysData = [];
         for (let i = 0; i < firstDayOfMonth; i++) {
             daysData.push({ day: daysInPrevMonth - firstDayOfMonth + i + 1, isInCurrentMonth: false });
@@ -54,25 +73,8 @@ const DatePicker = ({ selectedDate, setSelectedDate }) => {
         }
         console.log(daysData);
         return daysData;
-    };
+    }, [selectedMonthIndex, selectedYear]);
 
-    const renderDay = (day, isInCurrentMonth) => (
-        <Pressable
-            onPress={() => isInCurrentMonth && handleDateClick(day)}
-            style={[styles.renderDay, {
-                opacity: isInCurrentMonth ? 1 : 0.5,
-                backgroundColor: selectedDate && selectedDate.getDate() === day && selectedDate.getMonth() === selectedMonthIndex && isInCurrentMonth ? 'lightgreen' : 'transparent'
-            }]}
-        >
-            {day ? <Text>{day}</Text> : null}
-        </Pressable>
-    );
-
-    const renderDayHeader = (day, key) => (
-        <View key={key} style={styles.renderDayHeader}>
-            <Text style={{ fontWeight: 'bold' }}>{day}</Text>
-        </View>
-    );
 
     return (
         <View style={{ flex: 1, width: '100%' }}>
@@ -92,13 +94,22 @@ const DatePicker = ({ selectedDate, setSelectedDate }) => {
             </View>
 
             <View style={{ flexDirection: 'row' }}>
-                {daysOfTheWeek.map((day, index) => renderDayHeader(day, index.toString()))}
+                {daysOfTheWeek.map((day, index) => (
+                    <DayHeader key={index.toString()} day={day} />
+                ))}
             </View>
 
             <FlatList
                 style={{ flex: 1 }}
-                data={generateDaysData(firstDayOfMonth, daysInPrevMonth, daysInCurrentMonth)}
-                renderItem={({ item }) => renderDay(item.day, item.isInCurrentMonth)}
+                data={daysData}
+                renderItem={({ item }) => (
+                    <Day
+                        day={item.day}
+                        isInCurrentMonth={item.isInCurrentMonth}
+                        isToday={selectedDate && selectedDate.getDate() === item.day && selectedDate.getMonth() === selectedMonthIndex && item.isInCurrentMonth}
+                        onPress={() => item.isInCurrentMonth && handleDateClick(item.day)}
+                    />
+                )}
                 keyExtractor={(item, index) => index.toString()}
                 numColumns={7}
             />

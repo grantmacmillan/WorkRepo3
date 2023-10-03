@@ -1,57 +1,101 @@
-import React, { useState } from 'react';
-import { View, Text, Modal, TouchableOpacity, FlatList, Pressable } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Modal, TouchableOpacity, ScrollView, Dimensions, Pressable } from 'react-native';
 
 const TimePicker = ({ selectedTime, setSelectedTime }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [choosingHours, setChoosingHours] = useState(true);
+    const [time, setTime] = useState({ hour: '00', minute: '00', period: 'AM' });
 
-    const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
+
+    const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
     const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
+    const periods = ['AM', 'PM'];
 
-    const selectTime = (value) => {
-        let [hour, minute] = selectedTime.split(':');
-        if (choosingHours) {
-            hour = value;
-        } else {
-            minute = value;
-        }
-        setSelectedTime(`${hour}:${minute}`);
+    const handleTimeSelect = () => {
+        setSelectedTime(`${time.hour}:${time.minute} ${time.period}`);
         setModalVisible(false);
     };
 
-    const renderItem = ({ item }) => (
-        <Pressable onPress={() => selectTime(item)} style={{ padding: 16 }}>
-            <Text style={{ fontSize: 24 }}>{item}</Text>
-        </Pressable>
-    );
+    const renderTimeOptions = (data, type) => {
+        return data.map((value, index) => (
+            <Pressable
+                key={index}
+                onPress={() => handleSelect(value, type)}
+                style={{ padding: 10, alignItems: 'center' }}
+            >
+                <Text style={{ fontSize: 18 }}>{value}</Text>
+            </Pressable>
+        ));
+    };
+
+    const handleSelect = (value, type) => {
+        setTime(prev => ({ ...prev, [type]: value }));
+    };
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Pressable style={{ backgroundColor: 'red', padding: 16 }} onPress={() => { setChoosingHours(true); setModalVisible(true); }}>
-                <Text style={{ fontSize: 18, color: 'white' }}>{selectedTime || "Select Time"}</Text>
+            <Pressable
+                onPress={() => setModalVisible(true)}
+                style={{ backgroundColor: 'red', padding: 15, borderRadius: 5 }}
+            >
+                <Text style={{ color: 'white', fontSize: 16 }}>
+                    {selectedTime || 'Select Time'}
+                </Text>
             </Pressable>
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={{ width: '80%', height: '40%', backgroundColor: 'white', borderRadius: 8 }}>
-                        <Pressable onPress={() => { setChoosingHours(!choosingHours); }} style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
-                            <Text style={{ fontSize: 18 }}>Select {choosingHours ? 'Hour' : 'Minute'}</Text>
-                        </Pressable>
-                        <FlatList
-                            data={choosingHours ? hours : minutes}
-                            renderItem={renderItem}
-                            keyExtractor={(item) => item}
-                            numColumns={3} // Define how many columns you want to display per row
-                            contentContainerStyle={{ alignItems: 'center', padding: 16 }}
-                        />
+            {modalVisible && (
+                <View style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'rgba(0,0,0,0.5)'
+                }}>
+                    <View style={{
+                        backgroundColor: 'white',
+                        borderRadius: 10,
+                        width: '80%',
+                        height: 220
+                    }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 5 }}>
+                            <Text style={{ fontSize: 16 }}>Hours</Text>
+                            <Text style={{ fontSize: 16 }}>Minutes</Text>
+                            <Text style={{ fontSize: 16 }}>Peroid</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', height: 180 }}>
+                            <ScrollView style={{ width: '33.3%' }} showsVerticalScrollIndicator={false}>
+                                <View style={{ alignItems: 'center' }}>
+                                    {renderTimeOptions(hours, 'hour')}
+                                </View>
+                            </ScrollView>
+                            <ScrollView style={{ width: '33.3%' }} showsVerticalScrollIndicator={false}>
+                                <View style={{ alignItems: 'center' }}>
+                                    {renderTimeOptions(minutes, 'minute')}
+                                </View>
+                            </ScrollView>
+                            <ScrollView style={{ width: '33.3%' }} showsVerticalScrollIndicator={false}>
+                                <View style={{ alignItems: 'center' }}>
+                                    {renderTimeOptions(periods, 'period')}
+                                </View>
+                            </ScrollView>
+                        </View>
                     </View>
+                    <Pressable
+                        onPress={handleTimeSelect}
+                        style={{ marginTop: 20, backgroundColor: 'green', padding: 15, borderRadius: 5 }}
+                    >
+                        <Text style={{ color: 'white', fontSize: 16 }}>Select</Text>
+                    </Pressable>
+                    <Pressable
+                        onPress={() => setModalVisible(false)}
+                        style={{ marginTop: 10, backgroundColor: 'red', padding: 15, borderRadius: 5 }}
+                    >
+                        <Text style={{ color: 'white', fontSize: 16 }}>Cancel</Text>
+                    </Pressable>
                 </View>
-            </Modal>
+            )}
         </View>
     );
 };

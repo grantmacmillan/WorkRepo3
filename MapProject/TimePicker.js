@@ -2,8 +2,13 @@ import React, { useState, useRef } from 'react';
 import { View, Text, Modal, TouchableOpacity, ScrollView, Dimensions, Pressable } from 'react-native';
 
 const TimePicker = ({ selectedTime, setSelectedTime }) => {
+
+    const getInitialTime = () => {
+        return { hour: '12', minute: '00', period: 'AM' };
+    };
+
     const [modalVisible, setModalVisible] = useState(false);
-    const [time, setTime] = useState({ hour: '12', minute: '00', period: 'AM' });
+    const [time, setTime] = useState(getInitialTime);
 
 
     const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
@@ -12,7 +17,11 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
 
     //used for when user presses on the select button
     const handleTimeSelect = () => {
-        setSelectedTime(`${time.hour}:${time.minute} ${time.period}`);
+        // Constructing a Date
+        const hour24Format = parseInt(time.hour) % 12 + (time.period === 'PM' ? 12 : 0);
+        const newDate = new Date();
+        newDate.setHours(hour24Format, parseInt(time.minute), 0, 0);
+        setSelectedTime(newDate);
         setModalVisible(false);
     };
 
@@ -46,7 +55,11 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                 style={{ backgroundColor: 'red', padding: 15, borderRadius: 5 }}
             >
                 <Text style={{ color: 'white', fontSize: 16 }}>
-                    {selectedTime || 'Select Time'}
+                    {
+                        selectedTime ?
+                            `${time.hour}:${time.minute} ${time.period}` :
+                            'Select Time'
+                    }
                 </Text>
             </Pressable>
 

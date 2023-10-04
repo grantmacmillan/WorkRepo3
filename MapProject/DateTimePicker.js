@@ -41,7 +41,7 @@ const DateTimePicker = () => {
 
     //Use this function to save to Database
     const saveDateTime = () => {
-        console.log(selectedDateTime);
+        console.log(selectedDateTime.toString());
     };
 
     return (

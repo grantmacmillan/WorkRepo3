@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Button, Text, Modal, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { View, Button, Text, Modal, ScrollView, TouchableOpacity, FlatList, Pressable } from 'react-native';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 
@@ -39,11 +39,27 @@ const DateTimePicker = () => {
         setSelectedDateTime(combinedDateTime);
     };
 
+    //Use this function to save to Database
+    const saveDateTime = () => {
+        console.log(selectedDateTime);
+    };
+
     return (
         <View style={{ flex: 1, width: '100%' }}>
             <DatePicker selectedDate={selectedDate} setSelectedDate={handleDateChange} />
             <TimePicker selectedTime={selectedTime} setSelectedTime={handleTimeChange} />
-            <Text>{selectedDateTime.toString()}</Text>
+            <Pressable
+                onPress={saveDateTime}
+                style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'green',
+                    padding: 10,
+                    borderRadius: 5
+                }}
+            >
+                <Text style={{ color: 'white' }}>Save Date and Time</Text>
+            </Pressable>
         </View>
     );
 };

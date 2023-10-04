@@ -32,7 +32,7 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                 onPress={() => handleSelect(value, type)}
                 style={({ pressed }) => [
                     { padding: 10, alignItems: 'center' },
-                    // Highlight in green if the value is selected
+                    // Highlight in green if the time is selected
                     time[type] === value && { backgroundColor: 'lightgreen' },
 
                     pressed && { backgroundColor: 'lightgrey' }
@@ -49,7 +49,7 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
     };
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', paddingTop: 20, zIndex: 1000 }}>
             <Pressable
                 onPress={() => setModalVisible(true)}
                 style={{ backgroundColor: 'red', padding: 15, borderRadius: 5 }}

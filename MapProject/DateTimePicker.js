@@ -4,9 +4,17 @@ import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
 
 const DateTimePicker = () => {
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [selectedTime, setSelectedTime] = useState(new Date());
-    const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+    // date and time as the current date and time
+    const now = new Date();
+
+    // date object representing midnight of the current day
+    const midnightToday = new Date(now);
+    midnightToday.setHours(0, 0, 0, 0);
+
+    // Initialize state
+    const [selectedDate, setSelectedDate] = useState(midnightToday);
+    const [selectedTime, setSelectedTime] = useState(midnightToday);
+    const [selectedDateTime, setSelectedDateTime] = useState(midnightToday);
 
     const handleDateChange = useCallback((date) => {
         setSelectedDate(date);

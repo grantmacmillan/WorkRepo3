@@ -70,17 +70,25 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                     left: 0,
                     right: 0,
                     bottom: 0,
+                    paddingTop: 10,
+                    paddingBottom: 10,
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: 'rgba(0,0,0,0.5)'
                 }}>
-                    <View style={{
-                        backgroundColor: 'white',
-                        borderRadius: 10,
-                        width: '80%',
-                        height: 220
-                    }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 5 }}>
+                    <ScrollView
+                        contentContainerStyle={{
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                        style={{
+                            backgroundColor: 'white',
+                            borderRadius: 10,
+                            width: '80%',
+                            maxHeight: '80%',
+                        }}
+                    >
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 5, width: '100%' }}>
                             <View style={{ width: '33.3%', alignItems: 'center' }}>
                                 <Text style={{ fontSize: 16 }}>Hours</Text>
                             </View>
@@ -91,7 +99,7 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                                 <Text style={{ fontSize: 16 }}>Period</Text>
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', height: 180 }}>
+                        <View style={{ flexDirection: 'row', height: 180, width: '100%' }}>
                             <ScrollView style={{ width: '33.3%' }} showsVerticalScrollIndicator={false}>
                                 <View style={{ alignItems: 'center' }}>
                                     {renderTimeOptions(hours, 'hour')}
@@ -108,19 +116,14 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                                 </View>
                             </ScrollView>
                         </View>
-                    </View>
+                    </ScrollView>
                     <Pressable
                         onPress={handleTimeSelect}
                         style={{ marginTop: 20, backgroundColor: 'green', padding: 15, borderRadius: 5 }}
                     >
                         <Text style={{ color: 'white', fontSize: 16 }}>Select</Text>
                     </Pressable>
-                    <Pressable
-                        onPress={() => setModalVisible(false)}
-                        style={{ marginTop: 10, backgroundColor: 'red', padding: 15, borderRadius: 5 }}
-                    >
-                        <Text style={{ color: 'white', fontSize: 16 }}>Cancel</Text>
-                    </Pressable>
+
                 </View>
             )}
         </View>

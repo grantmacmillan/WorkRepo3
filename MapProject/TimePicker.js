@@ -3,13 +3,14 @@ import { View, Text, Modal, TouchableOpacity, ScrollView, Dimensions, Pressable 
 
 const TimePicker = ({ selectedTime, setSelectedTime }) => {
     const [modalVisible, setModalVisible] = useState(false);
-    const [time, setTime] = useState({ hour: '00', minute: '00', period: 'AM' });
+    const [time, setTime] = useState({ hour: '12', minute: '00', period: 'AM' });
 
 
     const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
     const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
     const periods = ['AM', 'PM'];
 
+    //used for when user presses on the select button
     const handleTimeSelect = () => {
         setSelectedTime(`${time.hour}:${time.minute} ${time.period}`);
         setModalVisible(false);
@@ -20,13 +21,20 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
             <Pressable
                 key={index}
                 onPress={() => handleSelect(value, type)}
-                style={{ padding: 10, alignItems: 'center' }}
+                style={({ pressed }) => [
+                    { padding: 10, alignItems: 'center' },
+                    // Highlight in green if the value is selected
+                    time[type] === value && { backgroundColor: 'lightgreen' },
+
+                    pressed && { backgroundColor: 'lightgrey' }
+                ]}
             >
                 <Text style={{ fontSize: 18 }}>{value}</Text>
             </Pressable>
         ));
     };
 
+    //used for when user presses on a time option (hours, minutes, period)
     const handleSelect = (value, type) => {
         setTime(prev => ({ ...prev, [type]: value }));
     };
@@ -60,9 +68,15 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                         height: 220
                     }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 5 }}>
-                            <Text style={{ fontSize: 16 }}>Hours</Text>
-                            <Text style={{ fontSize: 16 }}>Minutes</Text>
-                            <Text style={{ fontSize: 16 }}>Peroid</Text>
+                            <View style={{ width: '33.3%', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 16 }}>Hours</Text>
+                            </View>
+                            <View style={{ width: '33.3%', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 16 }}>Minutes</Text>
+                            </View>
+                            <View style={{ width: '33.3%', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 16 }}>Period</Text>
+                            </View>
                         </View>
                         <View style={{ flexDirection: 'row', height: 180 }}>
                             <ScrollView style={{ width: '33.3%' }} showsVerticalScrollIndicator={false}>

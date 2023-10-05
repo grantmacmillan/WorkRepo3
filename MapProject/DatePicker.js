@@ -9,10 +9,10 @@ const Day = ({ day, isInCurrentMonth, isToday, onPress }) => (
         onPress={onPress}
         style={[styles.renderDay, {
             opacity: isInCurrentMonth ? 1 : 0.5,
-            backgroundColor: isToday ? 'lightgreen' : 'transparent'
+            backgroundColor: isToday ? '#22668D' : '#FFFADD'
         }]}
     >
-        {day ? <Text>{day}</Text> : null}
+        {day ? <Text style={{ color: isToday ? '#FFFADD' : '#22668D' }}>{day}</Text> : null}
     </Pressable>
 );
 
@@ -79,17 +79,17 @@ const DatePicker = ({ selectedDate, setSelectedDate }) => {
     return (
         <View style={{ flex: 1, width: '100%' }}>
             <Text>Date Picker</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                <Pressable onPress={prevMonth} style={{ padding: 10 }}>
-                    <Text>&lt;</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingBottom: 10 }}>
+                <Pressable onPress={prevMonth} style={{ padding: 10, backgroundColor: '#22668D' }}>
+                    <Text style={{ color: '#FFFADD' }}>&lt;</Text>
                 </Pressable>
 
-                <Text style={{ padding: 10, fontWeight: 'bold' }}>
+                <Text style={{ padding: 10, fontWeight: 'bold', fontSize: 24 }}>
                     {`${monthNames[selectedMonthIndex]} ${selectedYear}`}
                 </Text>
 
-                <Pressable onPress={nextMonth} style={{ padding: 10 }}>
-                    <Text>&gt;</Text>
+                <Pressable onPress={nextMonth} style={{ padding: 10, backgroundColor: '#22668D' }}>
+                    <Text style={{ color: '#FFFADD' }}>&gt;</Text>
                 </Pressable>
             </View>
 
@@ -122,13 +122,13 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         borderWidth: 1,
-        borderColor: 'grey',
+        borderColor: '#FFCC70',
         alignItems: 'center',
         justifyContent: 'center',
 
     },
     renderDayHeader: {
-        flex: 1, padding: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0f0f0'
+        flex: 1, padding: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#FFCC70'
     }
 });
 

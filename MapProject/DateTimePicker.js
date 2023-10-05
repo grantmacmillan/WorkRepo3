@@ -53,12 +53,12 @@ const DateTimePicker = () => {
                 style={{
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: 'green',
+                    backgroundColor: '#22668D',
                     padding: 10,
                     borderRadius: 5
                 }}
             >
-                <Text style={{ color: 'white' }}>Save Date and Time</Text>
+                <Text style={{ color: '#FFFADD' }}>Save Date and Time</Text>
             </Pressable>
         </View>
     );

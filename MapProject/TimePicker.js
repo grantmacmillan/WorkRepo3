@@ -33,7 +33,7 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                 style={({ pressed }) => [
                     { padding: 10, alignItems: 'center' },
                     // Highlight in green if the time is selected
-                    time[type] === value && { backgroundColor: 'lightgreen' },
+                    time[type] === value && { backgroundColor: '#8ECDDD' },
 
                     pressed && { backgroundColor: 'lightgrey' }
                 ]}
@@ -52,9 +52,9 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
         <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', paddingTop: 20, zIndex: 1000 }}>
             <Pressable
                 onPress={() => setModalVisible(true)}
-                style={{ backgroundColor: 'red', padding: 15, borderRadius: 5 }}
+                style={{ backgroundColor: '#22668D', padding: 15, borderRadius: 5 }}
             >
-                <Text style={{ color: 'white', fontSize: 16 }}>
+                <Text style={{ color: '#FFFADD', fontSize: 16 }}>
                     {
                         selectedTime ?
                             `${time.hour}:${time.minute} ${time.period}` :
@@ -72,7 +72,7 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                     bottom: 0,
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    backgroundColor: '#FFFADD',
                     paddingTop: 10,
                     paddingBottom: 10,
 
@@ -117,7 +117,7 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
                     </View>
                     <Pressable
                         onPress={handleTimeSelect}
-                        style={{ marginTop: 20, backgroundColor: 'green', padding: 15, borderRadius: 5 }}
+                        style={{ marginTop: 20, backgroundColor: '#22668D', padding: 15, borderRadius: 5 }}
                     >
                         <Text style={{ color: 'white', fontSize: 16 }}>Select</Text>
                     </Pressable>

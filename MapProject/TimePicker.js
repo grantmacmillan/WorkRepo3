@@ -1,7 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react';
 import { View, Text, Modal, TouchableOpacity, ScrollView, Dimensions, Pressable } from 'react-native';
 
-const TimePicker = ({ selectedTime, setSelectedTime }) => {
+const TimePicker = forwardRef(({ selectedTime: externalSelectedTime, setSelectedTime: externalSetSelectedTime }, ref) => {
+
+    // HAVE STATES FOR BOTH INTERNAL AND EXTERNAL SELECTED DATE, WORKS FOR THE FORWARD REF
+    const [internalSelectedTime, setInternalSelectedTime] = useState(new Date());
+
+    const selectedTime = externalSelectedTime ?? internalSelectedTime;
+    const setSelectedTime = externalSetSelectedTime ?? setInternalSelectedTime;
 
     const getInitialTime = () => {
         return { hour: '12', minute: '00', period: 'AM' };
@@ -14,6 +20,13 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
     const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
     const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
     const periods = ['AM', 'PM'];
+
+    useImperativeHandle(ref, () => ({
+        // You can expose any function here. For example:
+        getSelectedTime: () => {
+            return selectedTime;
+        },
+    }));
 
     //used for when user presses on the select button
     const handleTimeSelect = () => {
@@ -125,6 +138,6 @@ const TimePicker = ({ selectedTime, setSelectedTime }) => {
             )}
         </View>
     );
-};
+});
 
 export default TimePicker;

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { forwardRef, useImperativeHandle, useState, useRef, useMemo } from 'react';
 import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
 
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -23,13 +23,26 @@ const DayHeader = ({ day }) => (
 );
 
 
-const DatePicker = ({ selectedDate, setSelectedDate }) => {
+const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelectedDate: externalSetSelectedDate }, ref) => {
+
+
+    const [internalSelectedDate, setInternalSelectedDate] = useState(new Date());
+
+    // HAVE STATES FOR BOTH INTERNAL AND EXTERNAL SELECTED DATE, WORKS FOR THE FORWARD REF
+    const selectedDate = externalSelectedDate ?? internalSelectedDate;
+    const setSelectedDate = externalSetSelectedDate ?? setInternalSelectedDate;
 
     //Set to current month and year and day by default. On the month button press they are changed lower down in the code. 
     const [selectedMonthIndex, setSelectedMonthIndex] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     //Date that the user selects.
     //const [selectedDate, setSelectedDate] = useState(new Date());
+
+    useImperativeHandle(ref, () => ({
+        getSelectedDate: () => {
+            return selectedDate;
+        },
+    }));
 
     const nextMonth = () => {
         if (selectedMonthIndex === 11) {
@@ -115,7 +128,7 @@ const DatePicker = ({ selectedDate, setSelectedDate }) => {
             />
         </View>
     );
-};
+});
 
 const styles = StyleSheet.create({
     renderDay: {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { forwardRef, useRef, useState, useEffect, useCallback } from 'react';
 import { View, Button, Text, Modal, ScrollView, TouchableOpacity, FlatList, Pressable } from 'react-native';
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
@@ -6,6 +6,10 @@ import TimePicker from './TimePicker';
 const DateTimePicker = () => {
     // date and time as the current date and time
     const now = new Date();
+
+    const timePickerRef = useRef(null);  // Create a ref
+    const datePickerRef = useRef(null);  // Create a ref
+
 
     // date object representing midnight of the current day
     const midnightToday = new Date(now);
@@ -16,15 +20,13 @@ const DateTimePicker = () => {
     const [selectedTime, setSelectedTime] = useState(midnightToday);
     const [selectedDateTime, setSelectedDateTime] = useState(midnightToday);
 
-    const handleDateChange = useCallback((date) => {
-        setSelectedDate(date);
-        combineDateTime(date, selectedTime);
-    }, [selectedTime]);
+    useEffect(() => {
+        combineDateTime(selectedDate, selectedTime);
+    }, [selectedDate, selectedTime]);
 
-    const handleTimeChange = useCallback((time) => {
-        setSelectedTime(time);
-        combineDateTime(selectedDate, time);
-    }, [selectedDate]);
+    useEffect(() => {
+        console.log('Selected Date Time: ' + selectedDateTime);
+    }, [selectedDateTime]);
 
     const combineDateTime = (date, time) => {
         const combinedDateTime = new Date(
@@ -37,17 +39,31 @@ const DateTimePicker = () => {
             time.getMilliseconds()
         );
         setSelectedDateTime(combinedDateTime);
+
     };
 
     //Use this function to save to Database
     const saveDateTime = () => {
-        console.log(selectedDateTime.toString());
+        if (timePickerRef.current != null && datePickerRef.current != null) {
+            const selectedTime1 = timePickerRef.current.getSelectedTime();
+            const selectedDate1 = datePickerRef.current.getSelectedDate();
+
+            // Trigger the useEffect by updating the state
+            setSelectedDate(selectedDate1);
+            setSelectedTime(selectedTime1);
+        }
+        else {
+            console.log('Please select a date and time');
+        }
     };
 
     return (
         <View style={{ flex: 1, width: '100%' }}>
-            <DatePicker selectedDate={selectedDate} setSelectedDate={handleDateChange} />
-            <TimePicker selectedTime={selectedTime} setSelectedTime={handleTimeChange} />
+            <DatePicker ref={datePickerRef} />
+            <TimePicker
+                ref={timePickerRef}
+            />
+
             <Pressable
                 onPress={saveDateTime}
                 style={{

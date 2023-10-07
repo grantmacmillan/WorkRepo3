@@ -1,5 +1,5 @@
-import React, { forwardRef, useImperativeHandle, useState, useRef, useMemo } from 'react';
-import { View, Text, Pressable, FlatList, StyleSheet } from 'react-native';
+import React, { forwardRef, useImperativeHandle, useState, useRef, useMemo, useEffect } from 'react';
+import { View, Text, Pressable, FlatList, StyleSheet, TextInput } from 'react-native';
 
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -38,11 +38,34 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
     //Date that the user selects.
     //const [selectedDate, setSelectedDate] = useState(new Date());
 
+    const [yearInput, setYearInput] = useState(selectedYear.toString());
+
+
     useImperativeHandle(ref, () => ({
         getSelectedDate: () => {
             return selectedDate;
         },
     }));
+
+    useEffect(() => {
+        setYearInput(selectedYear.toString());
+    }, [selectedYear]);
+
+
+    const handleYearInputChange = (input) => {
+        setYearInput(input);
+    };
+    const handleApplyYearInput = () => {
+        // Validation: Ensure that the input is a number and is within a reasonable range.
+        if (!isNaN(yearInput) && +yearInput > 0 && +yearInput <= 9999) {
+            setSelectedYear(+yearInput);
+        } else {
+            // Reset to the currently selected year on invalid input
+            setYearInput(selectedYear.toString());
+            console.log("Invalid year entered");
+        }
+    };
+
 
     const nextMonth = () => {
         if (selectedMonthIndex === 11) {
@@ -98,8 +121,18 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
                 </Pressable>
 
                 <Text style={{ padding: 10, fontWeight: 'bold', fontSize: 24 }}>
-                    {`${monthNames[selectedMonthIndex]} ${selectedYear}`}
+                    {`${monthNames[selectedMonthIndex]} `}
                 </Text>
+
+
+                <TextInput
+                    style={{ height: 30, borderColor: 'gray', borderWidth: 1, width: 70, textAlign: 'center' }}
+                    keyboardType="numeric"
+                    maxLength={4}
+                    value={yearInput}
+                    onChangeText={handleYearInputChange}
+                    onBlur={handleApplyYearInput}
+                />
 
                 <Pressable onPress={nextMonth} style={{ padding: 10, backgroundColor: '#22668D' }}>
                     <Text style={{ color: '#FFFADD' }}>&gt;</Text>

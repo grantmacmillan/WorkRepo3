@@ -39,6 +39,7 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
     //const [selectedDate, setSelectedDate] = useState(new Date());
 
     const [yearInput, setYearInput] = useState(selectedYear.toString());
+    const [monthInput, setMonthInput] = useState(monthNames[new Date().getMonth()]);  // Additional state to manage month input
 
 
     useImperativeHandle(ref, () => ({
@@ -51,10 +52,17 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
         setYearInput(selectedYear.toString());
     }, [selectedYear]);
 
+    useEffect(() => {
+        setMonthInput(monthNames[selectedMonthIndex]);
+    }, [selectedMonthIndex]);
 
     const handleYearInputChange = (input) => {
         setYearInput(input);
     };
+    const handleMonthInputChange = (input) => {
+        setMonthInput(input);
+    };
+
     const handleApplyYearInput = () => {
         // Validation: Ensure that the input is a number and is within a reasonable range.
         if (!isNaN(yearInput) && +yearInput > 0 && +yearInput <= 9999) {
@@ -63,6 +71,22 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
             // Reset to the currently selected year on invalid input
             setYearInput(selectedYear.toString());
             console.log("Invalid year entered");
+        }
+    };
+
+    const handleApplyMonthInput = () => {
+        // Ensure that the input is valid. It can be a full month name or a month number [1-12].
+        const monthIndexByName = monthNames.indexOf(monthInput);
+        const monthIndexByNumber = parseInt(monthInput) - 1;
+
+        if (monthIndexByName > -1) {
+            setSelectedMonthIndex(monthIndexByName);
+        } else if (!isNaN(monthIndexByNumber) && monthIndexByNumber >= 0 && monthIndexByNumber <= 11) {
+            setSelectedMonthIndex(monthIndexByNumber);
+        } else {
+            // Reset to the currently selected month on invalid input
+            setMonthInput(monthNames[selectedMonthIndex]);
+            console.log("Invalid month entered");
         }
     };
 
@@ -120,10 +144,12 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
                     <Text style={{ color: '#FFFADD' }}>&lt;</Text>
                 </Pressable>
 
-                <Text style={{ padding: 10, fontWeight: 'bold', fontSize: 24 }}>
-                    {`${monthNames[selectedMonthIndex]} `}
-                </Text>
-
+                <TextInput
+                    style={{ height: 30, borderColor: 'gray', borderWidth: 1, width: 100, textAlign: 'center' }}
+                    value={monthInput}
+                    onChangeText={handleMonthInputChange}
+                    onBlur={handleApplyMonthInput}
+                />
 
                 <TextInput
                     style={{ height: 30, borderColor: 'gray', borderWidth: 1, width: 70, textAlign: 'center' }}
@@ -152,7 +178,13 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
                     <Day
                         day={item.day}
                         isInCurrentMonth={item.isInCurrentMonth}
-                        isToday={selectedDate && selectedDate.getDate() === item.day && selectedDate.getMonth() === selectedMonthIndex && item.isInCurrentMonth}
+                        isToday={
+                            selectedDate &&
+                            selectedDate.getDate() === item.day &&
+                            selectedDate.getMonth() === selectedMonthIndex &&
+                            selectedDate.getFullYear() === selectedYear &&
+                            item.isInCurrentMonth
+                        }
                         onPress={() => item.isInCurrentMonth && handleDateClick(item.day)}
                     />
                 )}

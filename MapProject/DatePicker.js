@@ -64,19 +64,22 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
     };
 
     const handleApplyYearInput = () => {
-        // Validation: Ensure that the input is a number and is within a reasonable range.
+        // ensure that the input is a number and is within a reasonable range.
         if (!isNaN(yearInput) && +yearInput > 0 && +yearInput <= 9999) {
             setSelectedYear(+yearInput);
         } else {
-            // Reset to the currently selected year on invalid input
+            // reset to the currently selected year on invalid input
             setYearInput(selectedYear.toString());
             console.log("Invalid year entered");
         }
     };
 
     const handleApplyMonthInput = () => {
-        // Ensure that the input is valid. It can be a full month name or a month number [1-12].
-        const monthIndexByName = monthNames.indexOf(monthInput);
+        // ensure that the input is valid. It can be a full month name or a month number [1-12].
+        // this will return -1 if the month is not found in the array
+        const monthIndexByName = monthNames.findIndex(
+            month => month.toLowerCase() === monthInput.toLowerCase()
+        );
         const monthIndexByNumber = parseInt(monthInput) - 1;
 
         if (monthIndexByName > -1) {

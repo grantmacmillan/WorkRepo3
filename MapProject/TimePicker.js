@@ -1,13 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useState, useRef } from 'react';
-import { View, Text, Modal, TouchableOpacity, ScrollView, Dimensions, Pressable } from 'react-native';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 
-const TimePicker = forwardRef(({ selectedTime: externalSelectedTime, setSelectedTime: externalSetSelectedTime }, ref) => {
+const TimePicker = forwardRef(({ }, ref) => {
 
-    // HAVE STATES FOR BOTH INTERNAL AND EXTERNAL SELECTED DATE, WORKS FOR THE FORWARD REF
-    const [internalSelectedTime, setInternalSelectedTime] = useState(new Date());
-
-    const selectedTime = externalSelectedTime ?? internalSelectedTime;
-    const setSelectedTime = externalSetSelectedTime ?? setInternalSelectedTime;
+    const [selectedTime, setSelectedTime] = useState(new Date());
 
     const getInitialTime = () => {
         return { hour: '12', minute: '00', period: 'AM' };
@@ -16,13 +12,12 @@ const TimePicker = forwardRef(({ selectedTime: externalSelectedTime, setSelected
     const [modalVisible, setModalVisible] = useState(false);
     const [time, setTime] = useState(getInitialTime);
 
-
     const hours = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
     const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
     const periods = ['AM', 'PM'];
 
+    //for access from parent component
     useImperativeHandle(ref, () => ({
-        // You can expose any function here. For example:
         getSelectedTime: () => {
             return selectedTime;
         },
@@ -35,7 +30,7 @@ const TimePicker = forwardRef(({ selectedTime: externalSelectedTime, setSelected
         const newDate = new Date();
         newDate.setHours(hour24Format, parseInt(time.minute), 0, 0);
         setSelectedTime(newDate);
-        setModalVisible(false);
+        setModalVisible(false); //hide date selection screen
     };
 
     const renderTimeOptions = (data, type) => {
@@ -45,7 +40,7 @@ const TimePicker = forwardRef(({ selectedTime: externalSelectedTime, setSelected
                 onPress={() => handleSelect(value, type)}
                 style={({ pressed }) => [
                     { padding: 10, alignItems: 'center' },
-                    // Highlight in green if the time is selected
+                    // Highlight if the value is selected
                     time[type] === value && { backgroundColor: '#8ECDDD' },
 
                     pressed && { backgroundColor: 'lightgrey' }
@@ -57,6 +52,7 @@ const TimePicker = forwardRef(({ selectedTime: externalSelectedTime, setSelected
     };
 
     //used for when user presses on a time option (hours, minutes, period)
+    //value is selected value, and type is the type of time (hour, minute, period)
     const handleSelect = (value, type) => {
         setTime(prev => ({ ...prev, [type]: value }));
     };

@@ -4,6 +4,7 @@ import { View, Text, Pressable, FlatList, StyleSheet, TextInput } from 'react-na
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+// used for rendering each day in the month, checks for if it is in the current month, if it is today, and if it is selected.
 const Day = ({ day, isInCurrentMonth, isToday, onPress }) => (
     <Pressable
         onPress={onPress}
@@ -16,6 +17,7 @@ const Day = ({ day, isInCurrentMonth, isToday, onPress }) => (
     </Pressable>
 );
 
+// used for rendering the days of the week (Sunday - Saturday)
 const DayHeader = ({ day }) => (
     <View style={styles.renderDayHeader}>
         <Text style={{ fontWeight: 'bold' }}>{day}</Text>
@@ -23,14 +25,9 @@ const DayHeader = ({ day }) => (
 );
 
 
-const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelectedDate: externalSetSelectedDate }, ref) => {
+const DatePicker = forwardRef(({ }, ref) => {
 
-
-    const [internalSelectedDate, setInternalSelectedDate] = useState(new Date());
-
-    // HAVE STATES FOR BOTH INTERNAL AND EXTERNAL SELECTED DATE, WORKS FOR THE FORWARD REF
-    const selectedDate = externalSelectedDate ?? internalSelectedDate;
-    const setSelectedDate = externalSetSelectedDate ?? setInternalSelectedDate;
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     //Set to current month and year and day by default. On the month button press they are changed lower down in the code. 
     const [selectedMonthIndex, setSelectedMonthIndex] = useState(new Date().getMonth());
@@ -38,20 +35,20 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
     //Date that the user selects.
     //const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const [yearInput, setYearInput] = useState(selectedYear.toString());
+    const [yearInput, setYearInput] = useState(selectedYear.toString()); // Additional state to manage year input
     const [monthInput, setMonthInput] = useState(monthNames[new Date().getMonth()]);  // Additional state to manage month input
 
-
+    //for access from parent component
     useImperativeHandle(ref, () => ({
         getSelectedDate: () => {
             return selectedDate;
         },
     }));
 
+    // Update the year/month inputs when the selected selection changes
     useEffect(() => {
         setYearInput(selectedYear.toString());
     }, [selectedYear]);
-
     useEffect(() => {
         setMonthInput(monthNames[selectedMonthIndex]);
     }, [selectedMonthIndex]);
@@ -64,7 +61,8 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
     };
 
     const handleApplyYearInput = () => {
-        // ensure that the input is a number and is within a reasonable range.
+        // ensure that the input is a number and is within a reasonable range (1-9999)
+        // +yearInput converts the string to a number
         if (!isNaN(yearInput) && +yearInput > 0 && +yearInput <= 9999) {
             setSelectedYear(+yearInput);
         } else {
@@ -93,7 +91,7 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
         }
     };
 
-
+    //switch month on arrow presses, check if the year also needs to be updated.
     const nextMonth = () => {
         if (selectedMonthIndex === 11) {
             setSelectedYear(selectedYear + 1);
@@ -102,7 +100,6 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
             setSelectedMonthIndex(selectedMonthIndex + 1);
         }
     };
-
     const prevMonth = () => {
         if (selectedMonthIndex === 0) {
             setSelectedYear(selectedYear - 1);
@@ -114,7 +111,7 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
 
     const handleDateClick = (day) => {
         const clickedDate = new Date(selectedYear, selectedMonthIndex, day);
-        console.log(clickedDate);
+        //console.log(clickedDate);
         setSelectedDate(clickedDate);
     };
 
@@ -124,17 +121,20 @@ const DatePicker = forwardRef(({ selectedDate: externalSelectedDate, setSelected
         const daysInPrevMonth = new Date(selectedYear, selectedMonthIndex, 0).getDate();
 
         let daysData = [];
+        //fill days from previous month
         for (let i = 0; i < firstDayOfMonth; i++) {
             daysData.push({ day: daysInPrevMonth - firstDayOfMonth + i + 1, isInCurrentMonth: false });
         }
+        //fill days from current month
         for (let i = 1; i <= daysInCurrentMonth; i++) {
             daysData.push({ day: i, isInCurrentMonth: true });
         }
+        //fill days from next month
         const remainder = daysData.length % 7;
         for (let i = 1; i <= 7 - remainder; i++) {
             daysData.push({ day: i, isInCurrentMonth: false });
         }
-        console.log(daysData);
+        //console.log(daysData);
         return daysData;
     }, [selectedMonthIndex, selectedYear]);
 

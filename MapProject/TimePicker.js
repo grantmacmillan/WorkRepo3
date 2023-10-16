@@ -3,7 +3,9 @@ import { View, Text, ScrollView, Pressable } from 'react-native';
 
 const TimePicker = forwardRef(({ }, ref) => {
 
-    const [selectedTime, setSelectedTime] = useState(new Date());
+    const midnightToday = new Date();
+    midnightToday.setHours(0, 0, 0, 0);
+    const [selectedTime, setSelectedTime] = useState(midnightToday);
 
     const getInitialTime = () => {
         return { hour: '12', minute: '00', period: 'AM' };
@@ -31,6 +33,7 @@ const TimePicker = forwardRef(({ }, ref) => {
         newDate.setHours(hour24Format, parseInt(time.minute), 0, 0);
         setSelectedTime(newDate);
         setModalVisible(false); //hide date selection screen
+        //console.log(selectedTime);
     };
 
     const renderTimeOptions = (data, type) => {

@@ -16,24 +16,18 @@ const App = () => {
     { address: '44 Flint Cresent Stouffville Ontario', technician: 'Grant', color: 'green', id: '2' },
   ]);
 
-
-  const datePickerRef = useRef(null);  // Create a ref
-  const [selectedDate, setSelectedDate] = useState(midnightToday);
-  const midnightToday = new Date();
-  midnightToday.setHours(0, 0, 0, 0);
+  const timePickerRef = useRef(null);  // Create a ref
 
   //THIS TRIGGERS THE BUTTON TO SAVE THE TIME
   const saveDateTime = () => {
-    if (datePickerRef.current != null) {
-      const selectedDate1 = datePickerRef.current.getSelectedDate();
-      setSelectedDate(selectedDate1);
+    if (timePickerRef.current != null) {
+      const currentTime = timePickerRef.current.getSelectedTime();
+      console.log(currentTime);
     }
     else {
       console.log('Please select a date and time');
     }
-    console.log(selectedDate);
   };
-
 
   return (
     <View style={styles.container}>

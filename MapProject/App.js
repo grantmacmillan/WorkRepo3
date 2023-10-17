@@ -6,6 +6,7 @@ import AddressInput from './AddressInput';
 import DateTimePicker from './DateTimePicker';
 import TimePicker from './TimePicker';
 import DatePicker from './DatePicker';
+import ImageVideoDownload from './ImageVideoDownload';
 
 const libraries = ["places"];
 
@@ -21,7 +22,7 @@ const App = () => {
   //THIS TRIGGERS THE BUTTON TO SAVE THE TIME
   const saveDateTime = () => {
     if (timePickerRef.current != null) {
-      const currentTime = timePickerRef.current.getSelectedTime();
+      const currentTime = timePickerRef.current.getSelectedDate();
       console.log(currentTime);
     }
     else {
@@ -31,7 +32,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <DateTimePicker />
+      <ImageVideoDownload />
     </View>
   )
 

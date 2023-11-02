@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MapProject",
-    "slug": "MapProject",
+    "name": "Grant's Demo App",
+    "slug": "grants-demo-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

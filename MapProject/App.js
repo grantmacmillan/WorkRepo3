@@ -2,10 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { StyleSheet, Text, View, Platform, Pressable } from 'react-native';
 
-import AddressInput from './AddressInput';
-import DateTimePicker from './DateTimePicker';
-import TimePicker from './TimePicker';
-import DatePicker from './DatePicker';
 import ImageVideoDownload from './ImageVideoDownload';
 
 const libraries = ["places"];

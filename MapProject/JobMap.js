@@ -6,7 +6,7 @@ import axios from 'axios';
 const JobMap = ({ jobs }) => {
     const [coords, setCoords] = useState([]);
     const GEOCODING_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
-    const GOOGLE_API_KEY = 'AIzaSyDvs - pYzrss81ukHq49 - um25r1ZOXK - mHo'; // GRANTS API KEY - DO NOT SHARE
+    const GOOGLE_API_KEY = 'YOUR_API_KEY'; // GRANTS API KEY - DO NOT SHARE
 
     useEffect(() => {
         async function fetchCoordsForJobs() {
